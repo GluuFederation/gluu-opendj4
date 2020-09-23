@@ -83,28 +83,18 @@
       	<tag>4.0.0.gluu</tag>
   	</scm>
 	<repositories>
-<!-- 		<repository> -->
-<!-- 			<id>ossrh-releases</id> -->
-<!-- 			<name>Sonatype OSS</name> -->
-<!-- 			<url>https://oss.sonatype.org/content/repositories/releases/</url> -->
-<!-- 		</repository> -->
 		<repository>
-			<id>ossrh-snapshots</id>
-			<name>Sonatype OSS Repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://ox.gluu.org/maven</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 	</repositories>
 	<pluginRepositories>
-<!-- 		<pluginRepository> -->
-<!-- 			<id>ossrh-releases</id> -->
-<!-- 			<name>Sonatype OSS</name> -->
-<!-- 			<url>https://oss.sonatype.org/content/repositories/releases/</url> -->
-<!-- 		</pluginRepository> -->
 		<pluginRepository>
-			<id>ossrh-snapshots</id>
-			<name>Sonatype OSS Repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://ox.gluu.org/maven</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -112,14 +102,14 @@
 	</pluginRepositories>
 	<distributionManagement>
 		<repository>
-			<id>ossrh</id>
-			<name>Sonatype OSS Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://ox.gluu.org/maven</url>
 		</repository>
 		<snapshotRepository>
-			<id>ossrh</id>
-			<name>Sonatype OSS Repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://ox.gluu.org/maven</url>
 		</snapshotRepository>
 	</distributionManagement>
 

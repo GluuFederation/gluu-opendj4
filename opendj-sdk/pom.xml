@@ -56,12 +56,14 @@
     </scm>
 	<distributionManagement>
 		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://ox.gluu.org/maven</url>
 		</repository>
 		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://ox.gluu.org/maven</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<modules>
