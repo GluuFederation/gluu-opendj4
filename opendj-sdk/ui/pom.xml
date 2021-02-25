@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.gluufederation.commons</groupId>
     <artifactId>parent</artifactId>
-    <version>2.0.10</version>
+    <version>2.0.11</version>
   </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -304,7 +304,7 @@
             <artifactItem>
               <groupId>org.gluufederation.commons.ui.libs</groupId>
               <artifactId>jquery</artifactId>
-              <version>2.1.1</version>
+              <version>3.5.1</version>
               <packaging>js</packaging>
               <classifier>min</classifier>
               <downloadUrl>https://cdnjs.cloudflare.com/ajax/libs/jquery/{version}/{artifactId}.{classifier}.{packaging}</downloadUrl>
@@ -585,7 +585,7 @@
       <dependency>
         <groupId>org.gluufederation.commons.ui.libs</groupId>
         <artifactId>jquery</artifactId>
-        <version>2.1.1</version>
+        <version>3.5.1</version>
         <type>js</type>
         <classifier>min</classifier>
       </dependency>
