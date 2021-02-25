@@ -28,6 +28,21 @@
   <version position="right"/>
   <body>
 
+    <breadcrumbs>
+      <item name="Developer Community" href="https://www.gluufederation.org"/>
+      <item name="Commons" href="https://github.com/GluuFederation/commons"/>
+      <item name="Doc Default Branding"
+            href="https://github.com/GluuFederation/commons/tree/master/commons/doc-default-branding"/>
+    </breadcrumbs>
+
+    <menu name="Development">
+      <item name="Join"
+            href="https://github.com/GluuFederation"/>
+      <item name="Issue Tracking" href="https://github.com/GluuFederation/commons/issues"/>
+      <item name="License" href="https://github.com/GluuFederation/commons/blob/master/README.md"/>
+      <item name="Source Repository" href="https://github.com/GluuFederation/commons/"/>
+    </menu>
+
     <menu ref="reports"/>
 
   </body>

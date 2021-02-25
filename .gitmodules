@@ -1,0 +1,6 @@
+[submodule "forgerock-parent"]
+	path = forgerock-parent
+	url = https://github.com/GluuFederation/forgerock-parent.git
+[submodule "commons"]
+	path = commons
+	url = https://github.com/GluuFederation/commons.git
