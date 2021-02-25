@@ -21,7 +21,7 @@ WORKDIR /opt
 RUN apk add --update wget unzip
 
 RUN wget --quiet \
-  https://github.com/GluuFederation/gluu-opendj4/releases/download/$VERSION/opendj-$VERSION.zip && \
+  https://github.com/GluuFederation/OpenDJ/releases/download/$VERSION/opendj-$VERSION.zip && \
   unzip opendj-$VERSION.zip && \
   rm -r opendj-$VERSION.zip
 

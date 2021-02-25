@@ -20,14 +20,14 @@
     <parent>
         <groupId>org.gluufederation.commons.authn-filter</groupId>
         <artifactId>jaspi-modules</artifactId>
-        <version>2.0.7</version>
+        <version>2.0.10</version>
     </parent>
 	<groupId>org.gluufederation.commons.authn-filter.jaspi-modules</groupId>
     <artifactId>openam-session-module</artifactId>
     <packaging>bundle</packaging>
 
     <name>${project.groupId}.${project.artifactId}</name>
-    <description>Gluu Federation JASPI (JSR-196) OpenAM Session Authentication Module</description>
+    <description>Gluu FederationJASPI (JSR-196) OpenAM Session Authentication Module</description>
 
     <build><finalName>${project.groupId}.${project.artifactId}</finalName>
         <plugins>

@@ -25,7 +25,7 @@ branches:
    - master
 notifications:
  email:
-  - support@gluu.org
+  - open-identity-platform@googlegroups.com
 install:
   - echo 'install'
 script:
