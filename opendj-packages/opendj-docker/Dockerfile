@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:8-jre-slim
 
 MAINTAINER Gluu Federation <support@gluu.org>
 
