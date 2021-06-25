@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>org.gluufederation.opendj</groupId>
     <artifactId>opendj-parent</artifactId>
-	<version>4.4.10</version>
+	<version>4.4.11</version>
     <packaging>pom</packaging>
 
     <name>OpenDJ Directory Services Project</name>
@@ -34,7 +34,7 @@
         <product.locales>ca_ES,es,de,fr,ja,ko,pl,zh_CN,zh_TW</product.locales>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <localized.jars.classifier>i18n</localized.jars.classifier>
-        <freemarker.version>2.3.28</freemarker.version>
+        <freemarker.version>2.3.31</freemarker.version>
         <grizzly-framework.version>2.4.4</grizzly-framework.version>
         <metrics-core.version>3.1.2</metrics-core.version>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -106,7 +106,7 @@
         <connection>scm:git:https://github.com/GluuFederation/OpenDJ.git</connection>
         <developerConnection>scm:git:https://github.com/GluuFederation/OpenDJ.git</developerConnection>
         <url>https://github.com/GluuFederation/OpenDJ</url>
-      	<tag>4.4.10</tag>
+      	<tag>4.4.11</tag>
   	</scm>
 	<repositories>
 		<repository>

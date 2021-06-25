@@ -1,6 +1,6 @@
 # <img alt="OpenDJ Logo" src="https://github.com/GluuFederation/OpenDJ/raw/master/logo.png" width="300"/>
 [![Latest release](https://img.shields.io/github/release/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ/releases)
-[![Build Status](https://travis-ci.org/GluuFederation/OpenDJ.svg)](https://travis-ci.org/GluuFederation/OpenDJ)
+[![Build Status](https://travis-ci.com/GluuFederation/OpenDJ.svg)](https://travis-ci.com/GluuFederation/OpenDJ)
 [![Issues](https://img.shields.io/github/issues/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ/issues)
 [![Last commit](https://img.shields.io/github/last-commit/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ/commits/master)
 [![License](https://img.shields.io/badge/license-CDDL-blue.svg)](https://github.com/GluuFederation/OpenDJ/blob/master/LICENSE.md)
