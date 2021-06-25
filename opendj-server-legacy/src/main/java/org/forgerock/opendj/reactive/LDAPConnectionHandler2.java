@@ -941,7 +941,7 @@ public final class LDAPConnectionHandler2 extends ConnectionHandler<LDAPConnecti
             final TrustManager[] trustManagers =
                     trustMgrDN == null ? null : serverContext.getTrustManagerProvider(trustMgrDN).getTrustManagers();
             SSLContext sslContext = SSLContext.getInstance(SSL_CONTEXT_INSTANCE_NAME);
-            if (isFips()) {
+            if (StaticUtils.isFips()) {
             	sslContext.init(keyManagerProvider.getKeyManagers(), trustManagers, null);
             } else {
             	sslContext.init(keyManagers, trustManagers, null);
@@ -954,16 +954,6 @@ public final class LDAPConnectionHandler2 extends ConnectionHandler<LDAPConnecti
             throw new DirectoryException(resCode, message, e);
         }
     }
-
-    boolean isFips() {
-		Provider[] providers = Security.getProviders();
-		for (int i = 0; i < providers.length; i++) {
-			if (providers[i].getName().toLowerCase().contains("fips"))
-				return true;
-		}
-		
-		return false;
-	}
 
     /**
      * Enqueue a connection finalizer which will be invoked after a short delay.

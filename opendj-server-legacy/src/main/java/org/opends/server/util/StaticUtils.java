@@ -71,6 +71,8 @@ import org.opends.server.types.IdentifiedException;
 
 import com.forgerock.opendj.cli.Argument;
 import com.forgerock.opendj.cli.ArgumentException;
+import java.security.Provider;
+import java.security.Security;
 
 /**
  * This class defines a number of static utility methods that may be used
@@ -2579,5 +2581,16 @@ public final class StaticUtils
       }
     }
   }
+
+	public static boolean isFips() {
+		Provider[] providers = Security.getProviders();
+		for (int i = 0; i < providers.length; i++) {
+			if (providers[i].getName().toLowerCase().contains("fips"))
+				return true;
+		}
+
+		return false;
+	}
+
 }
 
