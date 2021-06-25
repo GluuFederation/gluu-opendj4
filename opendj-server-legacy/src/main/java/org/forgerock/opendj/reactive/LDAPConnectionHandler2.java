@@ -92,6 +92,8 @@ import org.opends.server.util.StaticUtils;
 
 import com.forgerock.reactive.ReactiveHandler;
 import com.forgerock.reactive.Stream;
+import java.security.Provider;
+import java.security.Security;
 
 /**
  * This class defines a connection handler that will be used for communicating with clients over LDAP. It is actually
@@ -939,7 +941,11 @@ public final class LDAPConnectionHandler2 extends ConnectionHandler<LDAPConnecti
             final TrustManager[] trustManagers =
                     trustMgrDN == null ? null : serverContext.getTrustManagerProvider(trustMgrDN).getTrustManagers();
             SSLContext sslContext = SSLContext.getInstance(SSL_CONTEXT_INSTANCE_NAME);
-            sslContext.init(keyManagers, trustManagers, null);
+            if (isFips()) {
+            	sslContext.init(keyManagerProvider.getKeyManagers(), trustManagers, null);
+            } else {
+            	sslContext.init(keyManagers, trustManagers, null);
+            }
             return sslContext;
         } catch (Exception e) {
             logger.traceException(e);
@@ -948,6 +954,16 @@ public final class LDAPConnectionHandler2 extends ConnectionHandler<LDAPConnecti
             throw new DirectoryException(resCode, message, e);
         }
     }
+
+    boolean isFips() {
+		Provider[] providers = Security.getProviders();
+		for (int i = 0; i < providers.length; i++) {
+			if (providers[i].getName().toLowerCase().contains("fips"))
+				return true;
+		}
+		
+		return false;
+	}
 
     /**
      * Enqueue a connection finalizer which will be invoked after a short delay.
