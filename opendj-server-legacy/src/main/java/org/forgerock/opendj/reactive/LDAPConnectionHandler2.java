@@ -941,7 +941,7 @@ public final class LDAPConnectionHandler2 extends ConnectionHandler<LDAPConnecti
             final TrustManager[] trustManagers =
                     trustMgrDN == null ? null : serverContext.getTrustManagerProvider(trustMgrDN).getTrustManagers();
             SSLContext sslContext = SSLContext.getInstance(SSL_CONTEXT_INSTANCE_NAME);
-            if (StaticUtils.isFips()) {
+            if (isFips()) {
             	sslContext.init(keyManagerProvider.getKeyManagers(), trustManagers, null);
             } else {
             	sslContext.init(keyManagers, trustManagers, null);
