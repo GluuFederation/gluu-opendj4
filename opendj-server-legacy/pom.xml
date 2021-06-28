@@ -238,6 +238,12 @@
     </dependency>
 
     <dependency>
+      <groupId>de.odysseus.juel</groupId>
+      <artifactId>juel-api</artifactId>
+      <version>${juel.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bc-fips</artifactId>
       <version>${bc.fips.version}</version>
