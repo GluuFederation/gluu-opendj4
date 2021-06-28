@@ -64,6 +64,8 @@
     <product.archive.name>${product.name.lowercase}-${project.version}</product.archive.name>
 
     <juel.version>2.2.7</juel.version>
+    <bc.fips.version>1.0.2.1</bc.fips.version>
+    <bctls.fips.version>1.0.9</bctls.fips.version>
     
     <doclint>none</doclint>
     <opendmk.lib.dir>${basedir}/opendmk</opendmk.lib.dir>
@@ -236,9 +238,15 @@
     </dependency>
 
     <dependency>
-      <groupId>de.odysseus.juel</groupId>
-      <artifactId>juel-api</artifactId>
-      <version>${juel.version}</version>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bc-fips</artifactId>
+      <version>${bc.fips.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bctls-fips</artifactId>
+      <version>${bctls.fips.version}</version>
     </dependency>
   </dependencies>
 

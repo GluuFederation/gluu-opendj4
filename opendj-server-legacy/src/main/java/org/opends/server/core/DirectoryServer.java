@@ -569,6 +569,7 @@ public final class DirectoryServer
     {
       CLIENT_INIT,
       CORE_CONFIG,
+      BC_FIPS_CRYPTO,
       INIT_CRYPTO,
       ADMIN_BACKEND,
       ADMIN_USERS,
@@ -605,6 +606,7 @@ public final class DirectoryServer
     public InitializationBuilder requireCryptoServices()
     {
       Collections.addAll(subSystemsToInitialize,
+          SubSystem.BC_FIPS_CRYPTO,
           SubSystem.INIT_CRYPTO,
           SubSystem.ADMIN_BACKEND,
           SubSystem.ADMIN_USERS,
@@ -689,6 +691,9 @@ public final class DirectoryServer
         case START_CRYPTO:
           startCryptoServices();
           break;
+        case BC_FIPS_CRYPTO:
+            registerBcProvider();
+            break;
         case USER_PLUGINS:
           startUserPlugin();
           break;
@@ -758,6 +763,23 @@ public final class DirectoryServer
       {
         throw new InitializationException(ERR_CANNOT_INITIALIZE_CRYPTO_MANAGER.get(e.getLocalizedMessage()));
       }
+    }
+
+    private void registerBcProvider() throws InitializationException
+    {
+    	if (!isFips()) {
+    		return;
+    	}
+    	
+    	org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider bouncyCastleProvider = (org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider) java.security.Security.getProvider(org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider.PROVIDER_NAME);
+		if (bouncyCastleProvider == null) {
+			logger.info(INFO_BC_PROVIDER_REGISTER.get());
+
+			bouncyCastleProvider = new org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider();
+			java.security.Security.addProvider(bouncyCastleProvider);
+		} else {
+			logger.info(INFO_BC_PROVIDER_REGISTERED_ALREADY.get());
+		}
     }
 
     private void startCryptoServices() throws InitializationException
