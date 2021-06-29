@@ -807,11 +807,19 @@ public final class ConnectionFactoryProvider {
 
         X509TrustManager tm = null;
         if (trustStorePathArg.isPresent() && trustStorePathArg.getValue().length() > 0) {
-            tm = TrustManagers.checkValidityDates(TrustManagers.checkHostName(hostNameArg.getValue(),
-                    TrustManagers.checkUsingTrustStore(trustStorePathArg.getValue(), getTrustStorePIN(), null)));
+        	if (Utils.isFips()) {
+	            tm = TrustManagers.checkUsingTrustStore(trustStorePathArg.getValue(), getTrustStorePIN(), null);
+        	} else {
+	            tm = TrustManagers.checkValidityDates(TrustManagers.checkHostName(hostNameArg.getValue(),
+	                    TrustManagers.checkUsingTrustStore(trustStorePathArg.getValue(), getTrustStorePIN(), null)));
+        	}
         } else if (getTrustStore() != null) {
-            tm = TrustManagers.checkValidityDates(TrustManagers.checkHostName(hostNameArg.getValue(),
-                    TrustManagers.checkUsingTrustStore(getTrustStore(), getTrustStorePIN(), null)));
+        	if (Utils.isFips()) {
+	            tm = TrustManagers.checkUsingTrustStore(getTrustStore(), getTrustStorePIN(), null);
+        	} else {
+                tm = TrustManagers.checkValidityDates(TrustManagers.checkHostName(hostNameArg.getValue(),
+                        TrustManagers.checkUsingTrustStore(getTrustStore(), getTrustStorePIN(), null)));
+        	}
         }
 
         if (app != null && !app.isQuiet()) {
