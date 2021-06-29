@@ -712,9 +712,12 @@ public final class ConnectionFactoryProvider {
             keyStorePIN = keyStorePass.toCharArray();
         }
 
-        final KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-        try (final FileInputStream fos = new FileInputStream(keyStoreFile)) {
-            keystore.load(fos, keyStorePIN);
+        final String keyStoreType = KeyStore.getDefaultType();
+        final KeyStore keystore = KeyStore.getInstance(keyStoreType);
+        if (!"pkcs11".equalsIgnoreCase(keyStoreType)) {
+	        try (final FileInputStream fos = new FileInputStream(keyStoreFile)) {
+	            keystore.load(fos, keyStorePIN);
+	        }
         }
 
         return new ApplicationKeyManager(keystore, keyStorePIN);
