@@ -355,6 +355,9 @@ public final class ConnectionFactoryProvider {
      * @throws NoSuchAlgorithmException
      *         If an SSL context could not be created.
      */
+    public static List<String> getDefaultProtocols() throws NoSuchAlgorithmException {
+    	return getDefaultProtocols(SSLContext.getDefault());
+    }
     public static List<String> getDefaultProtocols(SSLContext sslContext) throws NoSuchAlgorithmException {
         List<String> enabled = Arrays.asList(sslContext.createSSLEngine().getEnabledProtocols());
         final String property = System.getProperty("org.opends.ldaps.protocols");
