@@ -355,8 +355,8 @@ public final class ConnectionFactoryProvider {
      * @throws NoSuchAlgorithmException
      *         If an SSL context could not be created.
      */
-    public static List<String> getDefaultProtocols() throws NoSuchAlgorithmException {
-        List<String> enabled = Arrays.asList(SSLContext.getDefault().createSSLEngine().getEnabledProtocols());
+    public static List<String> getDefaultProtocols(SSLContext sslContext) throws NoSuchAlgorithmException {
+        List<String> enabled = Arrays.asList(sslContext.createSSLEngine().getEnabledProtocols());
         final String property = System.getProperty("org.opends.ldaps.protocols");
         final List<String> defaults = new ArrayList<>();
         if (property != null && property.length() != 0) {
@@ -462,7 +462,7 @@ public final class ConnectionFactoryProvider {
                 try {
                     options.set(SSL_CONTEXT, sslContext)
                             .set(SSL_USE_STARTTLS, useStartTLSArg.isPresent())
-                            .set(SSL_ENABLED_PROTOCOLS, getDefaultProtocols());
+                            .set(SSL_ENABLED_PROTOCOLS, getDefaultProtocols(sslContext));
                 } catch (NoSuchAlgorithmException e) {
                     throw new ArgumentException(ERR_LDAP_CONN_CANNOT_INITIALIZE_SSL.get(e.toString()), e);
                 }
@@ -714,7 +714,9 @@ public final class ConnectionFactoryProvider {
 
         final String keyStoreType = KeyStore.getDefaultType();
         final KeyStore keystore = KeyStore.getInstance(keyStoreType);
-        if (!"pkcs11".equalsIgnoreCase(keyStoreType)) {
+        if ("pkcs11".equalsIgnoreCase(keyStoreType)) {
+            keystore.load(null, keyStorePIN);
+        } else {
 	        try (final FileInputStream fos = new FileInputStream(keyStoreFile)) {
 	            keystore.load(fos, keyStorePIN);
 	        }
@@ -805,16 +807,17 @@ public final class ConnectionFactoryProvider {
             return TrustManagers.trustAll();
         }
 
+        boolean isFips = Utils.isFips();
         X509TrustManager tm = null;
         if (trustStorePathArg.isPresent() && trustStorePathArg.getValue().length() > 0) {
-        	if (Utils.isFips()) {
+        	if (isFips) {
 	            tm = TrustManagers.checkUsingTrustStore(trustStorePathArg.getValue(), getTrustStorePIN(), null);
         	} else {
 	            tm = TrustManagers.checkValidityDates(TrustManagers.checkHostName(hostNameArg.getValue(),
 	                    TrustManagers.checkUsingTrustStore(trustStorePathArg.getValue(), getTrustStorePIN(), null)));
         	}
         } else if (getTrustStore() != null) {
-        	if (Utils.isFips()) {
+        	if (isFips) {
 	            tm = TrustManagers.checkUsingTrustStore(getTrustStore(), getTrustStorePIN(), null);
         	} else {
                 tm = TrustManagers.checkValidityDates(TrustManagers.checkHostName(hostNameArg.getValue(),
@@ -822,7 +825,7 @@ public final class ConnectionFactoryProvider {
         	}
         }
 
-        if (app != null && !app.isQuiet()) {
+        if (app != null && !app.isQuiet() && !isFips) {
             return new PromptingTrustManager(app, tm);
         }
 
