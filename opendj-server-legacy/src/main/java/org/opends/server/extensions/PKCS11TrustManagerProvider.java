@@ -115,9 +115,8 @@ public class PKCS11TrustManagerProvider
       TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(trustManagerAlgorithm);
       trustManagerFactory.init(trustStore);
       TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-      TrustManager[] newTrustManagers = new TrustManager[trustManagers.length];
 
-      return newTrustManagers;
+      return trustManagers;
     }
     catch (Exception e)
     {
