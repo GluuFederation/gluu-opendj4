@@ -34,12 +34,15 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509KeyManager;
@@ -62,6 +65,8 @@ import org.forgerock.opendj.ldap.requests.GSSAPISASLBindRequest;
 import org.forgerock.opendj.ldap.requests.PlainSASLBindRequest;
 import org.forgerock.opendj.ldap.requests.Requests;
 import org.forgerock.util.Options;
+
+import com.forgerock.opendj.util.StaticUtils;
 
 /** A connection factory designed for use with command line tools. */
 public final class ConnectionFactoryProvider {
@@ -448,6 +453,8 @@ public final class ConnectionFactoryProvider {
 
                         if (akm != null && clientAlias != null) {
                             keyManager = KeyManagers.useSingleCertificate(clientAlias, akm);
+                        } else {
+                        	keyManager = akm;
                         }
 
                         sslContext =
@@ -697,9 +704,10 @@ public final class ConnectionFactoryProvider {
      *             If a problem occurs while loading with the key store.
      * @throws CertificateException
      *             If a problem occurs while loading with the key store.
+     * @throws UnrecoverableKeyException 
      */
     public X509KeyManager getKeyManager(String keyStoreFile) throws KeyStoreException,
-            IOException, NoSuchAlgorithmException, CertificateException {
+            IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
         if (keyStoreFile == null) {
             // Lookup the file name through the JDK property.
             keyStoreFile = getKeyStore();
@@ -715,9 +723,10 @@ public final class ConnectionFactoryProvider {
             keyStorePIN = keyStorePass.toCharArray();
         }
 
+        boolean isFips = StaticUtils.isFips();
         final String keyStoreType = KeyStore.getDefaultType();
         final KeyStore keystore = KeyStore.getInstance(keyStoreType);
-        if ("pkcs11".equalsIgnoreCase(keyStoreType)) {
+        if (isFips) {
             keystore.load(null, keyStorePIN);
         } else {
 	        try (final FileInputStream fos = new FileInputStream(keyStoreFile)) {
@@ -725,6 +734,18 @@ public final class ConnectionFactoryProvider {
 	        }
         }
 
+        if (isFips) {
+	        String keyManagerAlgorithm = KeyManagerFactory.getDefaultAlgorithm();
+	        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(keyManagerAlgorithm);
+	        keyManagerFactory.init(keystore, keyStorePIN);
+	        
+	        for (final KeyManager km : keyManagerFactory.getKeyManagers()) {
+	            if (km instanceof X509KeyManager) {
+	                return (X509KeyManager) km;
+	            }
+	        }
+        }
+        
         return new ApplicationKeyManager(keystore, keyStorePIN);
     }
 
@@ -810,7 +831,7 @@ public final class ConnectionFactoryProvider {
             return TrustManagers.trustAll();
         }
 
-        boolean isFips = Utils.isFips();
+        boolean isFips = StaticUtils.isFips();
         X509TrustManager tm = null;
         if (trustStorePathArg.isPresent() && trustStorePathArg.getValue().length() > 0) {
         	if (isFips) {

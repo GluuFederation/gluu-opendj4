@@ -732,13 +732,4 @@ public final class Utils {
         return ERR_TOOL_CONFLICTING_ARGS.get(arg1.getLongIdentifier(), arg2.getLongIdentifier());
     }
 
-    public static boolean isFips() {
-		Provider[] providers = Security.getProviders();
-		for (int i = 0; i < providers.length; i++) {
-			if (providers[i].getName().toLowerCase().contains("fips"))
-				return true;
-		}
-
-		return false;
-	}
 }
