@@ -122,7 +122,9 @@ public class FileBasedTrustManagerProvider
       trustManagerFactory.init(trustStore);
       TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
       TrustManager[] newTrustManagers = new TrustManager[trustManagers.length];
-      if (!isFips()) {
+      if (isFips()) {
+    	  newTrustManagers = trustManagers;
+      } else {
 	      for (int i=0; i < trustManagers.length; i++)
 	      {
 	        newTrustManagers[i] = new ExpirationCheckTrustManager((X509TrustManager) trustManagers[i]);
