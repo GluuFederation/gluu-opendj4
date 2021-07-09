@@ -1172,7 +1172,7 @@ public final class DirectoryServer
 			logger.info(INFO_BC_PROVIDER_REGISTER.get());
 
 			bouncyCastleProvider = new org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider();
-			java.security.Security.addProvider(bouncyCastleProvider);
+			java.security.Security.insertProviderAt(bouncyCastleProvider, 1);
 		} else {
 			logger.info(INFO_BC_PROVIDER_REGISTERED_ALREADY.get());
 		}
