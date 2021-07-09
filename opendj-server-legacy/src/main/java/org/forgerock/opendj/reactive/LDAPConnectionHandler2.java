@@ -22,6 +22,8 @@ import static org.opends.server.loggers.AccessLogger.logConnect;
 import static org.opends.server.util.ServerConstants.*;
 import static org.opends.server.util.StaticUtils.*;
 
+import static com.forgerock.opendj.util.StaticUtils.isFips;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;

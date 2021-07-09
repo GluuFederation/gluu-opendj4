@@ -27,6 +27,8 @@ import static org.opends.server.util.DynamicConstants.*;
 import static org.opends.server.util.ServerConstants.*;
 import static org.opends.server.util.StaticUtils.*;
 
+import static com.forgerock.opendj.util.StaticUtils.registerBcProvider;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -1159,23 +1161,6 @@ public final class DirectoryServer
       // make sure the timer thread is started in case it was stopped before
       TimeThread.start();
     }
-  }
-
-  private void registerBcProvider() throws InitializationException
-  {
-  	if (!isFips()) {
-  		return;
-  	}
-  	
-  	org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider bouncyCastleProvider = (org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider) java.security.Security.getProvider(org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider.PROVIDER_NAME);
-		if (bouncyCastleProvider == null) {
-			logger.info(INFO_BC_PROVIDER_REGISTER.get());
-
-			bouncyCastleProvider = new org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider();
-			java.security.Security.insertProviderAt(bouncyCastleProvider, 1);
-		} else {
-			logger.info(INFO_BC_PROVIDER_REGISTERED_ALREADY.get());
-		}
   }
 
   /**
@@ -5035,7 +5020,6 @@ public final class DirectoryServer
     try
     {
       theDirectoryServer.setEnvironmentConfig(environmentConfig);
-      theDirectoryServer.registerBcProvider();
       theDirectoryServer.bootstrapServer();
       theDirectoryServer.initializeConfiguration();
     }

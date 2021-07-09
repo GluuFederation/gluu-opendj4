@@ -2582,15 +2582,5 @@ public final class StaticUtils
     }
   }
 
-	public static boolean isFips() {
-		Provider[] providers = Security.getProviders();
-		for (int i = 0; i < providers.length; i++) {
-			if (providers[i].getName().toLowerCase().contains("fips"))
-				return true;
-		}
-
-		return false;
-	}
-
 }
 

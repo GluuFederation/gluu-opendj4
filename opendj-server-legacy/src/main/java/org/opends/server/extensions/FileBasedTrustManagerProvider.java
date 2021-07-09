@@ -43,6 +43,8 @@ import static org.opends.messages.ExtensionMessages.*;
 import static org.opends.server.extensions.FileBasedKeyManagerProvider.getKeyStorePIN;
 import static org.opends.server.util.StaticUtils.*;
 
+import static com.forgerock.opendj.util.StaticUtils.isFips;
+
 /**
  * This class defines a trust manager provider that will reference certificates
  * stored in a file located on the Directory Server filesystem.
