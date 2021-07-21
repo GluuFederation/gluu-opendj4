@@ -2582,5 +2582,17 @@ public final class StaticUtils
     }
   }
 
+  public static List<String> splittedStringAsList(String str, String delim) {
+      final List<String> result = new ArrayList<String>();
+      if ((str != null) && !str.isEmpty()) {
+          final String[] array = str.split(delim);
+          if (array.length > 0) {
+              result.addAll(Arrays.asList(array));
+          }
+      }
+
+      return result;
+  }
+
 }
 
