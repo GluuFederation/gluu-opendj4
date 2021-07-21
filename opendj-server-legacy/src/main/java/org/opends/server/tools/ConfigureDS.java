@@ -932,7 +932,6 @@ public class ConfigureDS
       {
         updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_TYPE);
         updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_FILE);
-        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYMANAGER_CLASS);
 
         updateConfigEntryWithObjectClasses(
                 attributeDN,
@@ -940,7 +939,7 @@ public class ConfigureDS
 
         updateConfigEntryWithAttribute(
             attributeDN,
-            ATTR_KEYMANAGER_DN,
+            ATTR_KEYMANAGER_CLASS,
             CoreSchema.getDirectoryStringSyntax(),
             "org.opends.server.extensions.PKCS11KeyManagerProvider");
 
