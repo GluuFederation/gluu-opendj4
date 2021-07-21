@@ -1207,7 +1207,7 @@ public class ConfigureDS
     {
       if (t.hasNameOrOID(attrName))
       {
-        entry.getUserAttributes().remove(t);
+    	duplicateEntry.getUserAttributes().remove(t);
         return duplicateEntry;
       }
     }
@@ -1216,7 +1216,7 @@ public class ConfigureDS
     {
       if (t.hasNameOrOID(attrName))
       {
-        entry.getOperationalAttributes().remove(t);
+    	duplicateEntry.getOperationalAttributes().remove(t);
         return duplicateEntry;
       }
     }
