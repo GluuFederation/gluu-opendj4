@@ -930,6 +930,10 @@ public class ConfigureDS
     {
       try
       {
+
+        updateConfigEntryByRemovingAttribute(ATTR_KEYMANAGER_DN, ATTR_KEYSTORE_TYPE);
+        updateConfigEntryByRemovingAttribute(ATTR_KEYMANAGER_DN, ATTR_KEYSTORE_FILE);
+
         updateConfigEntryWithAttribute(
             attributeDN,
             ATTR_KEYMANAGER_DN,
@@ -942,14 +946,9 @@ public class ConfigureDS
                 CoreSchema.getDirectoryStringSyntax(),
                 "config/keystore.pin");
 
-        updateConfigEntryWithAttribute(
+        updateConfigEntryWithObjectClasses(
                 attributeDN,
-                ATTR_OBJECTCLASS,
-                CoreSchema.getOIDSyntax(),
                 "top", "ds-cfg-key-manager-provider", "ds-cfg-pkcs11-key-manager-provider");
-        
-        updateConfigEntryByRemovingAttribute(ATTR_KEYMANAGER_DN, ATTR_KEYSTORE_TYPE);
-        updateConfigEntryByRemovingAttribute(ATTR_KEYMANAGER_DN, ATTR_KEYSTORE_FILE);
       }
       catch (final Exception e)
       {
@@ -1166,6 +1165,15 @@ public class ConfigureDS
     final org.forgerock.opendj.ldap.Entry configEntry = configHandler.getEntry(DN.valueOf(entryDn));
     final Entry newEntry = removeAttribute(Converters.to(configEntry), attributeName);
     configHandler.replaceEntry(configEntry, Converters.from(newEntry));
+  }
+
+  /** Update a config entry with the provided objectCLass parameters. */
+  private void updateConfigEntryWithObjectClasses(String entryDn, Object...objectCLasses)
+      throws DirectoryException, ConfigException
+  {
+    org.forgerock.opendj.ldap.Entry configEntry = configHandler.getEntry(DN.valueOf(entryDn));
+    final org.forgerock.opendj.ldap.Entry newEntry = putAttribute(configEntry, ATTR_OBJECTCLASS, CoreSchema.getOIDSyntax(), objectCLasses);
+    configHandler.replaceEntry(configEntry, newEntry, true);
   }
 
   /**
