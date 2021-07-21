@@ -38,11 +38,15 @@ import static org.opends.server.backends.task.TaskState.*;
 import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,6 +59,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.naming.ldap.Rdn;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.swing.JPanel;
 
 import org.forgerock.i18n.LocalizableMessage;
@@ -208,6 +214,8 @@ public class Installer extends GuiApplication
   private final Map<WizardStep, WizardStep> hmPreviousSteps = new HashMap<>();
 
   private char[] selfSignedCertPw;
+
+  private ApplicationTrustManager trustManager;
 
   private boolean registeredNewServerOnRemote;
   private boolean createdAdministrator;
@@ -1404,11 +1412,31 @@ public class Installer extends GuiApplication
       final String trustStoreType, final SecurityOptions sec) throws Exception
   {
     final String keystorePassword = sec.getKeystorePassword();
+    final String trustStorePath = getPath2("admin-truststore");
+
     CertificateManager certManager = new CertificateManager(keyStorePath, keyStoreType, keystorePassword);
     for (String keyStoreAlias : sec.getAliasesToUse())
     {
       SetupUtils.exportCertificate(certManager, keyStoreAlias, getTemporaryCertificatePath());
-      configureAdminTrustStore(trustStoreType, keyStoreAlias, keystorePassword);
+      configureAdminTrustStore(trustStorePath, trustStoreType, keyStoreAlias, keystorePassword);
+    }
+
+    // Set default trustManager to allow check server startup status
+    if (com.forgerock.opendj.util.StaticUtils.isFips()) {
+        KeyStore truststore = null;
+        try (final FileInputStream fis = new FileInputStream(trustStorePath))
+        {
+          truststore = KeyStore.getInstance(trustStoreType);
+          truststore.load(fis, keystorePassword.toCharArray());
+        }
+        catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e)
+        {
+          // Nothing to do: if this occurs we will systematically refuse the certificates.
+          // Maybe we should avoid this and be strict, but we are in a best effort mode.
+          logger.warn(LocalizableMessage.raw("Error with the truststore"), e);
+        }
+
+        this.trustManager = new ApplicationTrustManager(truststore);
     }
   }
 
@@ -1424,16 +1452,26 @@ public class Installer extends GuiApplication
     f.delete();
   }
 
-  private void configureAdminTrustStore(final String type, final String keyStoreAlias, final String password)
+  private void configureAdminTrustStore(final String trustStorePath, final String type, final String keyStoreAlias, final String password)
       throws Exception
   {
     final String alias = keyStoreAlias != null ? keyStoreAlias : SELF_SIGNED_CERT_ALIASES[0];
-    final CertificateManager trustMgr = new CertificateManager(getPath2("admin-truststore"), type, password);
+    final CertificateManager trustMgr = new CertificateManager(trustStorePath, type, password);
     trustMgr.addCertificate(alias, new File(getTemporaryCertificatePath()));
 
     createProtectedFile(getKeystorePinPath(), password);
     final File f = new File(getTemporaryCertificatePath());
     f.delete();
+  }
+
+  @Override
+  public ApplicationTrustManager getTrustManager()
+  {
+	if (trustManager != null) {
+		return trustManager;
+	}
+
+	return super.getTrustManager();
   }
 
   private void addCertificateArguments(SecurityOptions sec, List<String> argList)
@@ -4632,6 +4670,7 @@ public class Installer extends GuiApplication
     FileManager fileManager = new FileManager();
     fileManager.synchronize(getInstallation().getTemplateDirectory(), getInstallation().getInstanceDirectory());
   }
+
 }
 
 /** Class used to be able to cancel long operations. */
