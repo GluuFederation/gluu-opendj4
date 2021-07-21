@@ -461,7 +461,7 @@ public class ServerController {
     
     TrustManager trustManager = null;
     if (StaticUtils.isFips()) {
-      trustManager = application.getTrustManager();
+      trustManager = application.getTrustManager().getX509TrustManager();
     }
 
     for (int i=0; i<50 && !connected; i++)
