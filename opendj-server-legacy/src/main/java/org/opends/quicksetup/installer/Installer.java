@@ -27,6 +27,7 @@ import static org.opends.admin.ads.ServerDescriptor.*;
 import static org.opends.admin.ads.ServerDescriptor.ServerProperty.*;
 import static org.opends.admin.ads.util.ConnectionUtils.*;
 import static org.opends.admin.ads.util.PreferredConnection.Type.*;
+import static org.opends.messages.AdminMessages.WARN_ADMIN_SET_PERMISSIONS_FAILED;
 import static org.opends.messages.QuickSetupMessages.*;
 import static org.opends.quicksetup.Step.*;
 import static org.opends.quicksetup.installer.DataReplicationOptions.Type.*;
@@ -40,6 +41,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.security.KeyStoreException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -125,6 +127,8 @@ import org.opends.quicksetup.util.Utils;
 import org.opends.server.backends.task.TaskState;
 import org.opends.server.tools.BackendTypeHelper;
 import org.opends.server.tools.BackendTypeHelper.BackendTypeUIAdapter;
+import org.opends.server.types.DirectoryException;
+import org.opends.server.types.FilePermission;
 import org.opends.server.types.HostPort;
 import org.opends.server.util.CertificateManager;
 import org.opends.server.util.CollectionUtils;
@@ -1363,6 +1367,8 @@ public class Installer extends GuiApplication
       case PKCS11:
         configureKeyAndTrustStore(CertificateManager.KEY_STORE_PATH_PKCS11, CertificateManager.KEY_STORE_TYPE_PKCS11,
             CertificateManager.KEY_STORE_TYPE_JKS, sec);
+        configureAdminKeyAndTrustStore(CertificateManager.KEY_STORE_PATH_PKCS11, CertificateManager.KEY_STORE_TYPE_PKCS11,
+                CertificateManager.KEY_STORE_TYPE_JKS, sec);
         break;
 
       default:
@@ -1394,11 +1400,35 @@ public class Installer extends GuiApplication
     }
   }
 
+  private void configureAdminKeyAndTrustStore(final String keyStorePath, final String keyStoreType,
+      final String trustStoreType, final SecurityOptions sec) throws Exception
+  {
+    final String keystorePassword = sec.getKeystorePassword();
+    CertificateManager certManager = new CertificateManager(keyStorePath, keyStoreType, keystorePassword);
+    for (String keyStoreAlias : sec.getAliasesToUse())
+    {
+      SetupUtils.exportCertificate(certManager, keyStoreAlias, getTemporaryCertificatePath());
+      configureAdminTrustStore(trustStoreType, keyStoreAlias, keystorePassword);
+    }
+  }
+
   private void configureTrustStore(final String type, final String keyStoreAlias, final String password)
       throws Exception
   {
     final String alias = keyStoreAlias != null ? keyStoreAlias : SELF_SIGNED_CERT_ALIASES[0];
     final CertificateManager trustMgr = new CertificateManager(getTrustManagerPath(), type, password);
+    trustMgr.addCertificate(alias, new File(getTemporaryCertificatePath()));
+
+    createProtectedFile(getKeystorePinPath(), password);
+    final File f = new File(getTemporaryCertificatePath());
+    f.delete();
+  }
+
+  private void configureAdminTrustStore(final String type, final String keyStoreAlias, final String password)
+      throws Exception
+  {
+    final String alias = keyStoreAlias != null ? keyStoreAlias : SELF_SIGNED_CERT_ALIASES[0];
+    final CertificateManager trustMgr = new CertificateManager(getPath2("admin-truststore"), type, password);
     trustMgr.addCertificate(alias, new File(getTemporaryCertificatePath()));
 
     createProtectedFile(getKeystorePinPath(), password);
