@@ -931,8 +931,8 @@ public class ConfigureDS
       try
       {
 
-        updateConfigEntryByRemovingAttribute(ATTR_KEYMANAGER_DN, ATTR_KEYSTORE_TYPE);
-        updateConfigEntryByRemovingAttribute(ATTR_KEYMANAGER_DN, ATTR_KEYSTORE_FILE);
+        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_TYPE);
+        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_FILE);
 
         updateConfigEntryWithAttribute(
             attributeDN,
