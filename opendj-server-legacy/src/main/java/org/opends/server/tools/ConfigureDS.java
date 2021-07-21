@@ -930,9 +930,13 @@ public class ConfigureDS
     {
       try
       {
-
         updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_TYPE);
         updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_FILE);
+        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYMANAGER_CLASS);
+
+        updateConfigEntryWithObjectClasses(
+                attributeDN,
+                "top", "ds-cfg-pkcs11-key-manager-provider", "ds-cfg-key-manager-provider");
 
         updateConfigEntryWithAttribute(
             attributeDN,
@@ -945,10 +949,6 @@ public class ConfigureDS
                 ATTR_KEYSTORE_PIN_FILE,
                 CoreSchema.getDirectoryStringSyntax(),
                 "config/keystore.pin");
-
-        updateConfigEntryWithObjectClasses(
-                attributeDN,
-                "top", "ds-cfg-key-manager-provider", "ds-cfg-pkcs11-key-manager-provider");
       }
       catch (final Exception e)
       {
