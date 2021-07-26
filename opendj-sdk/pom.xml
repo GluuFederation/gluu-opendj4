@@ -195,8 +195,8 @@
         <jackson.version>2.11.1</jackson.version>
         <slf4j.version>1.7.30</slf4j.version>
         <swagger.version>1.6.2</swagger.version>
-        <apache-httpcore.version>4.4.11</apache-httpcore.version>
-        <apache-httpclient.version>4.5.9</apache-httpclient.version>
+        <apache-httpcore.version>4.4.14</apache-httpcore.version>
+        <apache-httpclient.version>4.5.13</apache-httpclient.version>
         <apache-httpasyncclient.version>4.1.4</apache-httpasyncclient.version>
     </properties>
 
