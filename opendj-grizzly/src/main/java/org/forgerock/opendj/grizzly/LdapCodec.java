@@ -84,11 +84,11 @@ abstract class LdapCodec extends LDAPBaseFilter {
                 ctx.setMessage(decodePacket(new ASN1BufferReader(maxASN1ElementSize, buffer.asReadOnlyBuffer())));
                 buffer.tryDispose();
                 return ctx.getInvokeAction(remainder);
-            }
-
-            if (logger.isTraceEnabled()) {
-            	logger.trace(String.format("Disposed buffer hasCode: %d", System.identityHashCode(buffer)));
-            }
+	        } finally {
+	            if (logger.isTraceEnabled()) {
+	            	logger.trace(String.format("Disposed buffer hasCode: %d", System.identityHashCode(buffer)));
+	            }
+	        }
         } catch (Exception e) {
             onLdapCodecError(ctx, e);
             ctx.getConnection().closeSilently();
