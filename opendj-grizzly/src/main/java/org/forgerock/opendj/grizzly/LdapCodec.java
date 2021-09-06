@@ -21,6 +21,7 @@ import static org.forgerock.opendj.ldap.spi.LdapMessages.newRequestEnvelope;
 
 import java.io.IOException;
 
+import org.forgerock.i18n.slf4j.LocalizedLogger;
 import org.forgerock.opendj.io.LDAPWriter;
 import org.forgerock.opendj.ldap.ByteString;
 import org.forgerock.opendj.ldap.DecodeException;
@@ -47,6 +48,8 @@ abstract class LdapCodec extends LDAPBaseFilter {
     private boolean isLdapV2Pending;
     private boolean isLdapV2;
 
+    private static final LocalizedLogger logger = LocalizedLogger.getLoggerForThisClass();
+    
     LdapCodec(final int maxElementSize, final DecodeOptions decodeOptions) {
         super(decodeOptions, maxElementSize);
     }
@@ -61,7 +64,12 @@ abstract class LdapCodec extends LDAPBaseFilter {
                 if (!reader.elementAvailable()) {
                     buffer.position(mark);
                     // We need to create a duplicate because buffer will be closed by the reader (try-with-resources)
-                    return ctx.getStopAction(buffer.duplicate());
+                    final Buffer bufferDuplicated = buffer.duplicate();
+                    if (logger.isTraceEnabled()) {
+                    	logger.trace(String.format("Cloned buffer hasCode: %d", System.identityHashCode(bufferDuplicated)));
+                    }
+
+                    return ctx.getStopAction(bufferDuplicated);
                 }
                 final int length = reader.peekLength();
                 if (length > maxASN1ElementSize) {
@@ -76,6 +84,10 @@ abstract class LdapCodec extends LDAPBaseFilter {
                 ctx.setMessage(decodePacket(new ASN1BufferReader(maxASN1ElementSize, buffer.asReadOnlyBuffer())));
                 buffer.tryDispose();
                 return ctx.getInvokeAction(remainder);
+            }
+
+            if (logger.isTraceEnabled()) {
+            	logger.trace(String.format("Disposed buffer hasCode: %d", System.identityHashCode(buffer)));
             }
         } catch (Exception e) {
             onLdapCodecError(ctx, e);
