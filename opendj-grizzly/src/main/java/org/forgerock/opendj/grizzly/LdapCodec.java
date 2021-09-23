@@ -16,12 +16,28 @@
 package org.forgerock.opendj.grizzly;
 
 import static com.forgerock.opendj.ldap.CoreMessages.ERR_LDAP_CLIENT_DECODE_MAX_REQUEST_SIZE_EXCEEDED;
-import static org.forgerock.opendj.io.LDAP.*;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_ADD_REQUEST;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_ADD_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_BIND_REQUEST;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_BIND_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_COMPARE_REQUEST;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_COMPARE_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_DELETE_REQUEST;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_DELETE_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_EXTENDED_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_INTERMEDIATE_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_MODIFY_DN_REQUEST;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_MODIFY_DN_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_MODIFY_REQUEST;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_MODIFY_RESPONSE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_SEARCH_REQUEST;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_SEARCH_RESULT_DONE;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_SEARCH_RESULT_ENTRY;
+import static org.forgerock.opendj.io.LDAP.OP_TYPE_SEARCH_RESULT_REFERENCE;
 import static org.forgerock.opendj.ldap.spi.LdapMessages.newRequestEnvelope;
 
 import java.io.IOException;
 
-import org.forgerock.i18n.slf4j.LocalizedLogger;
 import org.forgerock.opendj.io.LDAPWriter;
 import org.forgerock.opendj.ldap.ByteString;
 import org.forgerock.opendj.ldap.DecodeException;
@@ -39,6 +55,8 @@ import org.forgerock.opendj.ldap.spi.LdapMessages.LdapResponseMessage;
 import org.glassfish.grizzly.Buffer;
 import org.glassfish.grizzly.filterchain.FilterChainContext;
 import org.glassfish.grizzly.filterchain.NextAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Decodes {@link LdapRequestEnvelope} and encodes {@link Response}. This class keeps a state to handler the Ldap V2
@@ -48,7 +66,7 @@ abstract class LdapCodec extends LDAPBaseFilter {
     private boolean isLdapV2Pending;
     private boolean isLdapV2;
 
-    private static final LocalizedLogger logger = LocalizedLogger.getLoggerForThisClass();
+    private static final Logger LOGGER = LoggerFactory.getLogger(LdapCodec.class);
     
     LdapCodec(final int maxElementSize, final DecodeOptions decodeOptions) {
         super(decodeOptions, maxElementSize);
@@ -58,37 +76,30 @@ abstract class LdapCodec extends LDAPBaseFilter {
     public NextAction handleRead(final FilterChainContext ctx) throws IOException {
         try {
             final Buffer buffer = ctx.getMessage();
-            try (final ASN1BufferReader reader = new ASN1BufferReader(maxASN1ElementSize, buffer)) {
-                // Due to a bug in grizzly's ByteBufferWrapper.split(), we can't use byteBuffer.mark()
-                final int mark = buffer.position();
-                if (!reader.elementAvailable()) {
-                    buffer.position(mark);
-                    // We need to create a duplicate because buffer will be closed by the reader (try-with-resources)
-                    final Buffer bufferDuplicated = buffer.duplicate();
-                    if (logger.isTraceEnabled()) {
-                    	logger.trace(String.format("Cloned buffer hasCode: %d", System.identityHashCode(bufferDuplicated)));
-                    }
-
-                    return ctx.getStopAction(bufferDuplicated);
-                }
-                final int length = reader.peekLength();
-                if (length > maxASN1ElementSize) {
-                    buffer.position(mark);
-                    throw DecodeException.fatalError(
-                            ERR_LDAP_CLIENT_DECODE_MAX_REQUEST_SIZE_EXCEEDED.get(length, maxASN1ElementSize));
-                }
-                final Buffer remainder = (buffer.remaining() > length)
-                        ? buffer.split(buffer.position() + length)
-                        : null;
+            final ASN1BufferReader reader = new ASN1BufferReader(maxASN1ElementSize, buffer);
+            // Due to a bug in grizzly's ByteBufferWrapper.split(), we can't use byteBuffer.mark()
+            final int mark = buffer.position();
+            if (!reader.elementAvailable()) {
                 buffer.position(mark);
-                ctx.setMessage(decodePacket(new ASN1BufferReader(maxASN1ElementSize, buffer.asReadOnlyBuffer())));
-                buffer.tryDispose();
-                return ctx.getInvokeAction(remainder);
-	        } finally {
-	            if (logger.isTraceEnabled()) {
-	            	logger.trace(String.format("Disposed buffer hasCode: %d", System.identityHashCode(buffer)));
-	            }
-	        }
+//                    // We need to create a duplicate because buffer will be closed by the reader (try-with-resources)
+//                    final Buffer bufferDuplicated = buffer.duplicate();
+//                LOGGER.warn("MEMORY-CHECK: Skipping buffer duplication. Remaining in buffer: '{}', buffer hashCode: '{}'", buffer.remaining(), System.identityHashCode(buffer));
+
+                return ctx.getStopAction(buffer);
+            }
+            final int length = reader.peekLength();
+            if (length > maxASN1ElementSize) {
+                buffer.position(mark);
+                throw DecodeException.fatalError(
+                        ERR_LDAP_CLIENT_DECODE_MAX_REQUEST_SIZE_EXCEEDED.get(length, maxASN1ElementSize));
+            }
+            final Buffer remainder = (buffer.remaining() > length)
+                    ? buffer.split(buffer.position() + length)
+                    : null;
+            buffer.position(mark);
+            ctx.setMessage(decodePacket(new ASN1BufferReader(maxASN1ElementSize, buffer.asReadOnlyBuffer())));
+            reader.close();
+            return ctx.getInvokeAction(remainder);
         } catch (Exception e) {
             onLdapCodecError(ctx, e);
             ctx.getConnection().closeSilently();
