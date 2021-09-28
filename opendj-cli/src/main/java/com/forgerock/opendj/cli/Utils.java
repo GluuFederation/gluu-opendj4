@@ -34,7 +34,9 @@ import java.security.Security;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
@@ -730,6 +732,29 @@ public final class Utils {
      */
     public static LocalizableMessage conflictingArgsErrorMessage(final Argument arg1, final Argument arg2) {
         return ERR_TOOL_CONFLICTING_ARGS.get(arg1.getLongIdentifier(), arg2.getLongIdentifier());
+    }
+
+    /**
+     * Throws an {@link ArgumentException} if both provided {@link Argument} are presents in the command line arguments.
+     *
+     * @param arg1
+     *         The first {@link Argument} which should not be present if {@literal arg2} is.
+     * @param arg2
+     *         The second {@link Argument} which should not be present if {@literal arg1} is.
+     * @throws ArgumentException
+     *         If both provided {@link Argument} are presents in the command line arguments
+     */
+    public static String getFirstArgumentValue(final Argument ... args) {
+    	if (args == null) {
+    		return null;
+    	}
+    	
+    	Optional<Argument> arg = Arrays.asList(args).stream().filter(a -> a.isPresent()).findFirst();
+    	if (arg.isEmpty()) {
+    		return null;
+    	}
+    	
+    	return arg.get().getValue();
     }
 
 }
