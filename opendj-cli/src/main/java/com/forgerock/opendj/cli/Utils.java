@@ -735,26 +735,23 @@ public final class Utils {
     }
 
     /**
-     * Throws an {@link ArgumentException} if both provided {@link Argument} are presents in the command line arguments.
+     * Returns value of first present {@link Argument}.
      *
-     * @param arg1
-     *         The first {@link Argument} which should not be present if {@literal arg2} is.
-     * @param arg2
-     *         The second {@link Argument} which should not be present if {@literal arg1} is.
-     * @throws ArgumentException
-     *         If both provided {@link Argument} are presents in the command line arguments
+     * @param args
+     *         Array of {@link Argument} which should checked
      */
     public static String getFirstArgumentValue(final Argument ... args) {
     	if (args == null) {
     		return null;
     	}
     	
-    	Optional<Argument> arg = Arrays.asList(args).stream().filter(a -> a.isPresent()).findFirst();
-    	if (arg.isEmpty()) {
-    		return null;
+    	for (Argument arg : args) {
+    		if (arg.isPresent()) {
+    			return arg.getValue();
+    		}
     	}
     	
-    	return arg.get().getValue();
+		return null;
     }
 
 }
