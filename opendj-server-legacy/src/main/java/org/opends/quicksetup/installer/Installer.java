@@ -1379,6 +1379,13 @@ public class Installer extends GuiApplication
                 CertificateManager.KEY_STORE_TYPE_JKS, sec);
         break;
 
+      case BCFKS:
+          configureKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
+                  CertificateManager.KEY_STORE_TYPE_PKCS12, sec);
+          configureAdminKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
+                  CertificateManager.KEY_STORE_TYPE_PKCS12, sec);
+          break;
+
       default:
         throw new IllegalStateException("Unknown certificate type: " + certType);
       }
@@ -1502,6 +1509,10 @@ public class Installer extends GuiApplication
       addCertificateArguments(argList, null, aliasInKeyStore, "cn=PKCS11,cn=Key Manager Providers,cn=config",
           "cn=JKS,cn=Trust Manager Providers,cn=config");
       break;
+    case BCFKS:
+        addCertificateArguments(argList, null, aliasInKeyStore, "cn=BCFKS,cn=Key Manager Providers,cn=config",
+            "cn=BCFKS,cn=Trust Manager Providers,cn=config");
+        break;
     case NO_CERTIFICATE:
       // Nothing to do.
       break;
