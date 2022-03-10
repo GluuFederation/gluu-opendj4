@@ -1510,7 +1510,7 @@ public class Installer extends GuiApplication
           "cn=JKS,cn=Trust Manager Providers,cn=config");
       break;
     case BCFKS:
-        addCertificateArguments(argList, null, aliasInKeyStore, "cn=BCFKS,cn=Key Manager Providers,cn=config",
+        addCertificateArguments(argList, sec, aliasInKeyStore, "cn=BCFKS,cn=Key Manager Providers,cn=config",
             "cn=BCFKS,cn=Trust Manager Providers,cn=config");
         break;
     case NO_CERTIFICATE:
