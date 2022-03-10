@@ -1430,10 +1430,17 @@ public class Installer extends GuiApplication
 
     // Set default trustManager to allow check server startup status
     if (com.forgerock.opendj.util.StaticUtils.isFips()) {
+    	String usedTrustStorePath = trustStorePath;
+    	String usedTrustStoreType = trustStoreType;
+        if (keyStoreType.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
+        	usedTrustStorePath = getTrustManagerPath(keyStoreType);
+        	usedTrustStoreType = keyStoreType;
+        }
+
         KeyStore truststore = null;
-        try (final FileInputStream fis = new FileInputStream(trustStorePath))
+        try (final FileInputStream fis = new FileInputStream(usedTrustStorePath))
         {
-          truststore = KeyStore.getInstance(trustStoreType);
+          truststore = KeyStore.getInstance(usedTrustStoreType);
           truststore.load(fis, keystorePassword.toCharArray());
         }
         catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e)
