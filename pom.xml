@@ -119,7 +119,7 @@
 		<repository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 	</repositories>
@@ -127,7 +127,7 @@
 		<pluginRepository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -137,12 +137,12 @@
 		<repository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 		</repository>
 		<snapshotRepository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 		</snapshotRepository>
 	</distributionManagement>
 

@@ -1381,9 +1381,9 @@ public class Installer extends GuiApplication
 
       case BCFKS:
           configureKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
-                  CertificateManager.KEY_STORE_TYPE_PKCS12, sec);
+                  CertificateManager.KEY_STORE_TYPE_BCFKS, sec);
           configureAdminKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
-                  CertificateManager.KEY_STORE_TYPE_PKCS12, sec);
+                  CertificateManager.KEY_STORE_TYPE_JKS, sec);
           break;
 
       default:
@@ -1451,7 +1451,7 @@ public class Installer extends GuiApplication
       throws Exception
   {
     final String alias = keyStoreAlias != null ? keyStoreAlias : SELF_SIGNED_CERT_ALIASES[0];
-    final CertificateManager trustMgr = new CertificateManager(getTrustManagerPath(), type, password);
+    final CertificateManager trustMgr = new CertificateManager(getTrustManagerPath(type), type, password);
     trustMgr.addCertificate(alias, new File(getTemporaryCertificatePath()));
 
     createProtectedFile(getKeystorePinPath(), password);
@@ -4059,6 +4059,22 @@ public class Installer extends GuiApplication
   private String getTrustManagerPath()
   {
     return getPath2("truststore");
+  }
+
+  /**
+   * Returns the trustmanager path to be used for generating a self-signed
+   * certificate.
+   *
+   * @return the trustmanager path to be used for generating a self-signed
+   *         certificate.
+   */
+  private String getTrustManagerPath(String type)
+  {
+	  if (type.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
+		  return getPath2("truststore.bcfks");
+	  }
+
+	  return getPath2("truststore");
   }
 
   /**
