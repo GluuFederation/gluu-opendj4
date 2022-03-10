@@ -169,6 +169,9 @@ public class Installer extends GuiApplication
 
   /** The name of the backend created on setup. */
   public static final String ROOT_BACKEND_NAME = "userRoot";
+  
+  /** Admin cert */
+  public static final String ADMIN_CERT_ALIAS = "admin-cert";
 
   /** Constants used to do checks. */
   private static final int MIN_DIRECTORY_MANAGER_PWD = 1;
@@ -1418,15 +1421,15 @@ public class Installer extends GuiApplication
   private void configureAdminKeyAndTrustStore(final String keyStorePath, final String keyStoreType,
       final String trustStoreType, final SecurityOptions sec) throws Exception
   {
+	if (!sec.getAliasesToUse().contains(ADMIN_CERT_ALIAS)) {
+		return;
+	}
     final String keystorePassword = sec.getKeystorePassword();
     final String trustStorePath = getPath2("admin-truststore");
 
     CertificateManager certManager = new CertificateManager(keyStorePath, keyStoreType, keystorePassword);
-    for (String keyStoreAlias : sec.getAliasesToUse())
-    {
-      SetupUtils.exportCertificate(certManager, keyStoreAlias, getTemporaryCertificatePath());
-      configureAdminTrustStore(trustStorePath, trustStoreType, keyStoreAlias, keystorePassword);
-    }
+    SetupUtils.exportCertificate(certManager, ADMIN_CERT_ALIAS, getTemporaryCertificatePath());
+    configureAdminTrustStore(trustStorePath, trustStoreType, ADMIN_CERT_ALIAS, keystorePassword);
 
     // Set default trustManager to allow check server startup status
     if (com.forgerock.opendj.util.StaticUtils.isFips()) {
