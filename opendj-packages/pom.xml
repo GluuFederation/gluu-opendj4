@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.gluufederation.opendj</groupId>
         <artifactId>opendj-parent</artifactId>
-        <version>4.4.12</version>
+        <version>4.4.13</version>
     </parent>
 
     <artifactId>opendj-packages</artifactId>
