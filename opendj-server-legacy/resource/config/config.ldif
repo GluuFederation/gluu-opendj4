@@ -1567,7 +1567,7 @@ cn: BCFKS
 ds-cfg-java-class: org.opends.server.extensions.FileBasedTrustManagerProvider
 ds-cfg-enabled: false
 ds-cfg-trust-store-type: BCFKS
-ds-cfg-trust-store-file: config/truststore
+ds-cfg-trust-store-file: config/truststore.bcfks
 ds-cfg-trust-store-pin-file: config/keystore.pin
 
 dn: cn=Virtual Attributes,cn=config

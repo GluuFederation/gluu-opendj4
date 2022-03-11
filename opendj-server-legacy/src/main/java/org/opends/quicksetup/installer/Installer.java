@@ -169,9 +169,6 @@ public class Installer extends GuiApplication
 
   /** The name of the backend created on setup. */
   public static final String ROOT_BACKEND_NAME = "userRoot";
-  
-  /** Admin cert */
-  public static final String ADMIN_CERT_ALIAS = "admin-cert";
 
   /** Constants used to do checks. */
   private static final int MIN_DIRECTORY_MANAGER_PWD = 1;
@@ -1421,11 +1418,6 @@ public class Installer extends GuiApplication
   private void configureAdminKeyAndTrustStore(final String keyStorePath, final String keyStoreType,
       final String trustStoreType, final SecurityOptions sec) throws Exception
   {
-/*
-	  if (!sec.getAliasesToUse().contains(ADMIN_CERT_ALIAS)) {
-		return;
-	}
-*/
     final String keystorePassword = sec.getKeystorePassword();
     final String trustStorePath = getPath2("admin-truststore");
 
@@ -4087,8 +4079,8 @@ public class Installer extends GuiApplication
   private String getTrustManagerPath(String type)
   {
 	  if (type.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
-		  return getPath2("truststore");
-//		  return getPath2("truststore.bcfks");
+//		  return getPath2("truststore");
+		  return getPath2("truststore.bcfks");
 	  }
 
 	  return getPath2("truststore");
