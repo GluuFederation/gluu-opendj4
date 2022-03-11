@@ -505,7 +505,7 @@ public final class TrustManagers {
         final String defaultType = isFips ? "JKS" : KeyStore.getDefaultType();
         final String trustStoreFormat = format != null ? format : defaultType;
 
-        final KeyStore keyStore = KeyStore.getInstance(trustStoreFormat, "BCFIPS");
+        final KeyStore keyStore = KeyStore.getInstance(trustStoreFormat);
         try (FileInputStream fos = new FileInputStream(trustStoreFile)) {
             keyStore.load(fos, password);
         }
