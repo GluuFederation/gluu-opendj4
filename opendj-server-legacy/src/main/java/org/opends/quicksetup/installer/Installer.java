@@ -1421,25 +1421,31 @@ public class Installer extends GuiApplication
   private void configureAdminKeyAndTrustStore(final String keyStorePath, final String keyStoreType,
       final String trustStoreType, final SecurityOptions sec) throws Exception
   {
-	if (!sec.getAliasesToUse().contains(ADMIN_CERT_ALIAS)) {
+/*
+	  if (!sec.getAliasesToUse().contains(ADMIN_CERT_ALIAS)) {
 		return;
 	}
+*/
     final String keystorePassword = sec.getKeystorePassword();
     final String trustStorePath = getPath2("admin-truststore");
 
     CertificateManager certManager = new CertificateManager(keyStorePath, keyStoreType, keystorePassword);
-    SetupUtils.exportCertificate(certManager, ADMIN_CERT_ALIAS, getTemporaryCertificatePath());
-    configureAdminTrustStore(trustStorePath, trustStoreType, ADMIN_CERT_ALIAS, keystorePassword);
+    for (String keyStoreAlias : sec.getAliasesToUse())
+    {
+      SetupUtils.exportCertificate(certManager, keyStoreAlias, getTemporaryCertificatePath());
+      configureAdminTrustStore(trustStorePath, trustStoreType, keyStoreAlias, keystorePassword);
+    }
 
     // Set default trustManager to allow check server startup status
     if (com.forgerock.opendj.util.StaticUtils.isFips()) {
     	String usedTrustStorePath = trustStorePath;
     	String usedTrustStoreType = trustStoreType;
+/*
         if (keyStoreType.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
         	usedTrustStorePath = getTrustManagerPath(keyStoreType);
         	usedTrustStoreType = keyStoreType;
         }
-
+*/
         KeyStore truststore = null;
         try (final FileInputStream fis = new FileInputStream(usedTrustStorePath))
         {
@@ -4081,7 +4087,8 @@ public class Installer extends GuiApplication
   private String getTrustManagerPath(String type)
   {
 	  if (type.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
-		  return getPath2("truststore.bcfks");
+		  return getPath2("truststore");
+//		  return getPath2("truststore.bcfks");
 	  }
 
 	  return getPath2("truststore");
