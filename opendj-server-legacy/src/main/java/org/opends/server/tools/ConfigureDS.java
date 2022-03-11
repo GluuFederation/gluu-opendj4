@@ -940,7 +940,7 @@ public class ConfigureDS
 	                "BCFKS");
 
 	        updateConfigEntryWithAttribute(
-	                  keyManagerProviderDN.getValue(),
+	        		  attributeDN,
 	                  ATTR_KEYSTORE_FILE,
 	                  CoreSchema.getDirectoryStringSyntax(),
 	                  keyManagerPath.getValue());
