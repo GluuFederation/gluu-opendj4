@@ -881,8 +881,9 @@ public class ConfigureDS
       putKeyManagerConfigAttribute(enableStartTLS, DN_LDAP_CONNECTION_HANDLER);
       putKeyManagerConfigAttribute(ldapsPort, DN_LDAPS_CONNECTION_HANDLER);
       putKeyManagerConfigAttribute(ldapsPort, DN_HTTP_CONNECTION_HANDLER);
+
       if (StaticUtils.isFips()) {
-          putAdminKeyManagerConfigAttribute(ldapsPort, DN_ADMIN_KEY_MANAGER);
+          putAdminKeyManagerConfigAttribute(keyManagerProviderDN, DN_ADMIN_KEY_MANAGER);
       }
 
       if (keyManagerPath.isPresent())
@@ -923,31 +924,52 @@ public class ConfigureDS
     }
   }
 
-  private void putAdminKeyManagerConfigAttribute(final Argument arg, final String attributeDN)
+  private void putAdminKeyManagerConfigAttribute(final Argument keyManagerProviderDN, final String attributeDN)
       throws ConfigureDSException
   {
-    if (arg.isPresent())
+    if (keyManagerProviderDN.isPresent())
     {
       try
       {
-        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_TYPE);
-        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_FILE);
+    	boolean isBcfks = keyManagerProviderDN.getValue().toLowerCase().startsWith("cn=bcfks");
+    	if (isBcfks) {
+	        updateConfigEntryWithAttribute(
+	                attributeDN,
+	                ATTR_KEYSTORE_TYPE,
+	                CoreSchema.getDirectoryStringSyntax(),
+	                "BCFKS");
 
-        updateConfigEntryWithObjectClasses(
-                attributeDN,
-                "top", "ds-cfg-pkcs11-key-manager-provider", "ds-cfg-key-manager-provider");
+	        updateConfigEntryWithAttribute(
+	                  keyManagerProviderDN.getValue(),
+	                  ATTR_KEYSTORE_FILE,
+	                  CoreSchema.getDirectoryStringSyntax(),
+	                  keyManagerPath.getValue());
 
-        updateConfigEntryWithAttribute(
-            attributeDN,
-            ATTR_KEYMANAGER_CLASS,
-            CoreSchema.getDirectoryStringSyntax(),
-            "org.opends.server.extensions.PKCS11KeyManagerProvider");
-
-        updateConfigEntryWithAttribute(
-                attributeDN,
-                ATTR_KEYSTORE_PIN_FILE,
-                CoreSchema.getDirectoryStringSyntax(),
-                "config/keystore.pin");
+	        updateConfigEntryWithAttribute(
+	                attributeDN,
+	                ATTR_KEYSTORE_PIN_FILE,
+	                CoreSchema.getDirectoryStringSyntax(),
+	                "config/keystore.pin");
+    	} else {
+	        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_TYPE);
+	        updateConfigEntryByRemovingAttribute(attributeDN, ATTR_KEYSTORE_FILE);
+	
+	        updateConfigEntryWithObjectClasses(
+	                attributeDN,
+	                "top", "ds-cfg-pkcs11-key-manager-provider", "ds-cfg-key-manager-provider");
+	
+	        updateConfigEntryWithAttribute(
+	            attributeDN,
+	            ATTR_KEYMANAGER_CLASS,
+	            CoreSchema.getDirectoryStringSyntax(),
+	            "org.opends.server.extensions.PKCS11KeyManagerProvider");
+	
+	        updateConfigEntryWithAttribute(
+	                attributeDN,
+	                ATTR_KEYSTORE_PIN_FILE,
+	                CoreSchema.getDirectoryStringSyntax(),
+	                "config/keystore.pin");
+    	}
       }
       catch (final Exception e)
       {
