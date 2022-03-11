@@ -1055,19 +1055,19 @@ public class ConfigureDS
     	if (isBcfks) {
 	        updateConfigEntryWithAttribute(
 	                attributeDN,
-	                ATTR_KEYSTORE_TYPE,
+	                ATTR_TRUSTSTORE_TYPE,
 	                CoreSchema.getDirectoryStringSyntax(),
 	                "BCFKS");
 
 	        updateConfigEntryWithAttribute(
 	        		  attributeDN,
-	                  ATTR_KEYSTORE_FILE,
+	                  ATTR_TRUSTSTORE_FILE,
 	                  CoreSchema.getDirectoryStringSyntax(),
 	                  keyManagerPath.getValue());
 
 	        updateConfigEntryWithAttribute(
 	                attributeDN,
-	                ATTR_KEYSTORE_PIN_FILE,
+	                ATTR_TRUSTSTORE_PIN_FILE,
 	                CoreSchema.getDirectoryStringSyntax(),
 	                "config/keystore.pin");
     	}
