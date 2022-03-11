@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>org.gluufederation.opendj</groupId>
     <artifactId>opendj-parent</artifactId>
-	<version>4.4.12</version>
+	<version>4.4.13</version>
     <packaging>pom</packaging>
 
     <name>OpenDJ Directory Services Project</name>
@@ -106,13 +106,13 @@
         <connection>scm:git:https://github.com/GluuFederation/OpenDJ.git</connection>
         <developerConnection>scm:git:https://github.com/GluuFederation/OpenDJ.git</developerConnection>
         <url>https://github.com/GluuFederation/OpenDJ</url>
-      	<tag>4.4.12</tag>
+      	<tag>4.4.13</tag>
   	</scm>
 	<repositories>
 		<repository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 	</repositories>
@@ -120,7 +120,7 @@
 		<pluginRepository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -130,12 +130,12 @@
 		<repository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 		</repository>
 		<snapshotRepository>
 			<id>gluu</id>
 			<name>Gluu repository</name>
-			<url>https://ox.gluu.org/maven</url>
+			<url>https://maven.gluu.org/maven</url>
 		</snapshotRepository>
 	</distributionManagement>
 
