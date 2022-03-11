@@ -853,6 +853,10 @@ public final class ConnectionFactoryProvider {
             return new PromptingTrustManager(app, tm);
         }
 
+        if (isFips) {
+        	return TrustManagers.checkUsingPkcs11TrustStore();
+        }
+
         return tm;
     }
 

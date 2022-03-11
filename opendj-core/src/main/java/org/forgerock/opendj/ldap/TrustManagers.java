@@ -505,10 +505,26 @@ public final class TrustManagers {
         final String defaultType = isFips ? "JKS" : KeyStore.getDefaultType();
         final String trustStoreFormat = format != null ? format : defaultType;
 
-        final KeyStore keyStore = KeyStore.getInstance(trustStoreFormat);
+        final KeyStore keyStore = KeyStore.getInstance(trustStoreFormat, "BCFIPS");
         try (FileInputStream fos = new FileInputStream(trustStoreFile)) {
             keyStore.load(fos, password);
         }
+
+        final TrustManagerFactory tmf =
+                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        tmf.init(keyStore);
+
+        for (final TrustManager tm : tmf.getTrustManagers()) {
+            if (tm instanceof X509TrustManager) {
+                return (X509TrustManager) tm;
+            }
+        }
+        throw new NoSuchAlgorithmException();
+    }
+
+    public static X509TrustManager checkUsingPkcs11TrustStore() throws GeneralSecurityException, IOException {
+        final KeyStore keyStore = KeyStore.getInstance("PKCS11");
+        keyStore.load(null, null);
 
         final TrustManagerFactory tmf =
                 TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
