@@ -1376,14 +1376,14 @@ public class Installer extends GuiApplication
         configureKeyAndTrustStore(CertificateManager.KEY_STORE_PATH_PKCS11, CertificateManager.KEY_STORE_TYPE_PKCS11,
             CertificateManager.KEY_STORE_TYPE_JKS, sec);
         configureAdminKeyAndTrustStore(CertificateManager.KEY_STORE_PATH_PKCS11, CertificateManager.KEY_STORE_TYPE_PKCS11,
-                CertificateManager.KEY_STORE_TYPE_JKS, sec);
+                CertificateManager.KEY_STORE_TYPE_JKS, sec, false);
         break;
 
       case BCFKS:
           configureKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
                   CertificateManager.KEY_STORE_TYPE_BCFKS, sec);
           configureAdminKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
-                  CertificateManager.KEY_STORE_TYPE_JKS, sec);
+                  CertificateManager.KEY_STORE_TYPE_JKS, sec, true);
           break;
 
       default:
@@ -1416,16 +1416,18 @@ public class Installer extends GuiApplication
   }
 
   private void configureAdminKeyAndTrustStore(final String keyStorePath, final String keyStoreType,
-      final String trustStoreType, final SecurityOptions sec) throws Exception
+      final String trustStoreType, final SecurityOptions sec, boolean exportKeys) throws Exception
   {
     final String keystorePassword = sec.getKeystorePassword();
-    final String trustStorePath = getPath2("admin-truststore");
+    final String trustStorePath = getPath2("truststore");
 
-    CertificateManager certManager = new CertificateManager(keyStorePath, keyStoreType, keystorePassword);
-    for (String keyStoreAlias : sec.getAliasesToUse())
-    {
-      SetupUtils.exportCertificate(certManager, keyStoreAlias, getTemporaryCertificatePath());
-      configureAdminTrustStore(trustStorePath, trustStoreType, keyStoreAlias, keystorePassword);
+    if (exportKeys) {
+	    CertificateManager certManager = new CertificateManager(keyStorePath, keyStoreType, keystorePassword);
+	    for (String keyStoreAlias : sec.getAliasesToUse())
+	    {
+	      SetupUtils.exportCertificate(certManager, keyStoreAlias, getTemporaryCertificatePath());
+	      configureAdminTrustStore(trustStorePath, trustStoreType, keyStoreAlias, keystorePassword);
+	    }
     }
 
     // Set default trustManager to allow check server startup status
