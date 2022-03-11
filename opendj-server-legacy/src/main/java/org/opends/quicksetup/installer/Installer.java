@@ -1379,6 +1379,13 @@ public class Installer extends GuiApplication
                 CertificateManager.KEY_STORE_TYPE_JKS, sec);
         break;
 
+      case BCFKS:
+          configureKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
+                  CertificateManager.KEY_STORE_TYPE_BCFKS, sec);
+          configureAdminKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
+                  CertificateManager.KEY_STORE_TYPE_JKS, sec);
+          break;
+
       default:
         throw new IllegalStateException("Unknown certificate type: " + certType);
       }
@@ -1423,10 +1430,18 @@ public class Installer extends GuiApplication
 
     // Set default trustManager to allow check server startup status
     if (com.forgerock.opendj.util.StaticUtils.isFips()) {
+    	String usedTrustStorePath = trustStorePath;
+    	String usedTrustStoreType = trustStoreType;
+/*
+        if (keyStoreType.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
+        	usedTrustStorePath = getTrustManagerPath(keyStoreType);
+        	usedTrustStoreType = keyStoreType;
+        }
+*/
         KeyStore truststore = null;
-        try (final FileInputStream fis = new FileInputStream(trustStorePath))
+        try (final FileInputStream fis = new FileInputStream(usedTrustStorePath))
         {
-          truststore = KeyStore.getInstance(trustStoreType);
+          truststore = KeyStore.getInstance(usedTrustStoreType);
           truststore.load(fis, keystorePassword.toCharArray());
         }
         catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e)
@@ -1444,7 +1459,7 @@ public class Installer extends GuiApplication
       throws Exception
   {
     final String alias = keyStoreAlias != null ? keyStoreAlias : SELF_SIGNED_CERT_ALIASES[0];
-    final CertificateManager trustMgr = new CertificateManager(getTrustManagerPath(), type, password);
+    final CertificateManager trustMgr = new CertificateManager(getTrustManagerPath(type), type, password);
     trustMgr.addCertificate(alias, new File(getTemporaryCertificatePath()));
 
     createProtectedFile(getKeystorePinPath(), password);
@@ -1502,6 +1517,10 @@ public class Installer extends GuiApplication
       addCertificateArguments(argList, null, aliasInKeyStore, "cn=PKCS11,cn=Key Manager Providers,cn=config",
           "cn=JKS,cn=Trust Manager Providers,cn=config");
       break;
+    case BCFKS:
+        addCertificateArguments(argList, sec, aliasInKeyStore, "cn=BCFKS,cn=Key Manager Providers,cn=config",
+            "cn=BCFKS,cn=Trust Manager Providers,cn=config");
+        break;
     case NO_CERTIFICATE:
       // Nothing to do.
       break;
@@ -4048,6 +4067,23 @@ public class Installer extends GuiApplication
   private String getTrustManagerPath()
   {
     return getPath2("truststore");
+  }
+
+  /**
+   * Returns the trustmanager path to be used for generating a self-signed
+   * certificate.
+   *
+   * @return the trustmanager path to be used for generating a self-signed
+   *         certificate.
+   */
+  private String getTrustManagerPath(String type)
+  {
+	  if (type.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
+//		  return getPath2("truststore");
+		  return getPath2("truststore.bcfks");
+	  }
+
+	  return getPath2("truststore");
   }
 
   /**
