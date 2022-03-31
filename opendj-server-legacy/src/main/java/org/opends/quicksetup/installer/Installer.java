@@ -1376,14 +1376,14 @@ public class Installer extends GuiApplication
         configureKeyAndTrustStore(CertificateManager.KEY_STORE_PATH_PKCS11, CertificateManager.KEY_STORE_TYPE_PKCS11,
             CertificateManager.KEY_STORE_TYPE_JKS, sec);
         configureAdminKeyAndTrustStore(CertificateManager.KEY_STORE_PATH_PKCS11, CertificateManager.KEY_STORE_TYPE_PKCS11,
-                CertificateManager.KEY_STORE_TYPE_JKS, sec, false);
+                CertificateManager.KEY_STORE_TYPE_JKS, sec, true);
         break;
 
       case BCFKS:
           configureKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
-                  CertificateManager.KEY_STORE_TYPE_BCFKS, sec);
+                  CertificateManager.KEY_STORE_TYPE_JKS, sec);
           configureAdminKeyAndTrustStore(sec.getKeystorePath(), CertificateManager.KEY_STORE_TYPE_BCFKS,
-                  CertificateManager.KEY_STORE_TYPE_JKS, sec, true);
+                  CertificateManager.KEY_STORE_TYPE_BCFKS, sec, true);
           break;
 
       default:
@@ -1419,18 +1419,19 @@ public class Installer extends GuiApplication
       final String trustStoreType, final SecurityOptions sec, boolean exportKeys) throws Exception
   {
     final String keystorePassword = sec.getKeystorePassword();
-    final String trustStorePath = getPath2("truststore");
 
     if (exportKeys) {
+    	final String exportTrustStorePath = getExportTrustManagerPath(trustStoreType);
 	    CertificateManager certManager = new CertificateManager(keyStorePath, keyStoreType, keystorePassword);
 	    for (String keyStoreAlias : sec.getAliasesToUse())
 	    {
 	      SetupUtils.exportCertificate(certManager, keyStoreAlias, getTemporaryCertificatePath());
-	      configureAdminTrustStore(trustStorePath, trustStoreType, keyStoreAlias, keystorePassword);
+	      configureAdminTrustStore(exportTrustStorePath, trustStoreType, keyStoreAlias, keystorePassword);
 	    }
     }
 
     // Set default trustManager to allow check server startup status
+    final String trustStorePath = getPath2("truststore");
     if (com.forgerock.opendj.util.StaticUtils.isFips()) {
     	String usedTrustStorePath = trustStorePath;
     	String usedTrustStoreType = trustStoreType;
@@ -1461,7 +1462,7 @@ public class Installer extends GuiApplication
       throws Exception
   {
     final String alias = keyStoreAlias != null ? keyStoreAlias : SELF_SIGNED_CERT_ALIASES[0];
-    final CertificateManager trustMgr = new CertificateManager(getTrustManagerPath(type), type, password);
+    final CertificateManager trustMgr = new CertificateManager(getTrustManagerPath(), type, password);
     trustMgr.addCertificate(alias, new File(getTemporaryCertificatePath()));
 
     createProtectedFile(getKeystorePinPath(), password);
@@ -4072,20 +4073,19 @@ public class Installer extends GuiApplication
   }
 
   /**
-   * Returns the trustmanager path to be used for generating a self-signed
+   * Returns the trustmanager path to be used for exported
    * certificate.
    *
-   * @return the trustmanager path to be used for generating a self-signed
+   * @return the trustmanager path to be used for exporting
    *         certificate.
    */
-  private String getTrustManagerPath(String type)
+  private String getExportTrustManagerPath(String type)
   {
 	  if (type.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
-//		  return getPath2("truststore");
 		  return getPath2("truststore.bcfks");
 	  }
 
-	  return getPath2("truststore");
+	  return getPath2("admin-truststore");
   }
 
   /**
