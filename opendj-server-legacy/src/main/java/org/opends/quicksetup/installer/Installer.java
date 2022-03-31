@@ -1434,7 +1434,7 @@ public class Installer extends GuiApplication
     final String trustStorePath = getPath2("truststore");
     if (com.forgerock.opendj.util.StaticUtils.isFips()) {
     	String usedTrustStorePath = trustStorePath;
-    	String usedTrustStoreType = trustStoreType;
+    	String usedTrustStoreType = "JKS";
 /*
         if (keyStoreType.equals(CertificateManager.KEY_STORE_TYPE_BCFKS)) {
         	usedTrustStorePath = getTrustManagerPath(keyStoreType);
