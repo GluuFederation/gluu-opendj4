@@ -43,12 +43,6 @@ import org.forgerock.opendj.ldap.spi.Provider;
 import org.forgerock.util.Reject;
 import org.forgerock.util.Utils;
 
-import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_PROVIDER_REGISTER;
-import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_PROVIDER_REGISTERED_ALREADY;
-import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_FIPS_PROVIDER_NOT_EXISTS;
-import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_FIPS_PROVIDER_REGISTER;
-import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_PROVIDER_FAILED_TO_CREATE;
-
 /**
  * Common utility methods.
  */

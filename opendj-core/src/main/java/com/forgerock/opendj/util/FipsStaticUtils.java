@@ -4,6 +4,9 @@ import org.forgerock.i18n.slf4j.LocalizedLogger;
 
 import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_PROVIDER_REGISTER;
 import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_PROVIDER_REGISTERED_ALREADY;
+import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_FIPS_PROVIDER_NOT_EXISTS;
+import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_FIPS_PROVIDER_REGISTER;
+import static com.forgerock.opendj.ldap.CoreMessages.INFO_BC_PROVIDER_FAILED_TO_CREATE;
 
 import java.security.Security;
 
