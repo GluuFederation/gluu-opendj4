@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.gluufederation.commons</groupId>
     <artifactId>parent</artifactId>
-    <version>2.0.11</version>
+    <version>2.0.15</version>
     <packaging>pom</packaging>
     <name>${project.groupId}.${project.artifactId}</name>
     <description>Parent POM for Gluu Federation projects. Provides default project build configuration.</description>
@@ -54,9 +54,9 @@
     </issueManagement>
     <scm>
         <connection>scm:git:https://github.com/GluuFederation/commons.git</connection>
-        <developerConnection>scm:git:git@github.com/GluuFederation/commons.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/GluuFederation/commons.git</developerConnection>
         <url>https://github.com/GluuFederation/commons</url>
-        <tag>2.0.11</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
     	<developer>
@@ -70,12 +70,14 @@
     </developers>
 	<distributionManagement>
 		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://maven.gluu.org/maven</url>
 		</repository>
 		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>gluu</id>
+			<name>Gluu repository</name>
+			<url>https://maven.gluu.org/maven</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<modules>
@@ -99,7 +101,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- maven-compiler-plugin http://maven.apache.org/plugins/maven-compiler-plugin -->
-        <mavenCompilerPluginVersion>3.3</mavenCompilerPluginVersion>
+        <mavenCompilerPluginVersion>3.10.1</mavenCompilerPluginVersion>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
 
@@ -147,7 +149,7 @@
         <mavenDependencyPluginVersion>3.1.0</mavenDependencyPluginVersion>
 
         <!-- maven-clean-plugin http://maven.apache.org/components/plugins/maven-clean-plugin -->
-        <mavenCleanPluginVersion>3.0.0</mavenCleanPluginVersion>
+        <mavenCleanPluginVersion>3.1.0</mavenCleanPluginVersion>
 
         <!-- maven-jar-plugin http://maven.apache.org/plugins/maven-jar-plugin/ -->
         <mavenJarPluginVersion>3.0.2</mavenJarPluginVersion>
@@ -159,7 +161,7 @@
         <mavenAssemblyPluginVersion>3.1.0</mavenAssemblyPluginVersion>
 
         <!-- maven-surefire-plugin http://maven.apache.org/surefire/maven-surefire-plugin/ -->
-        <mavenSurefirePluginVersion>3.0.0-M3</mavenSurefirePluginVersion>
+        <mavenSurefirePluginVersion>3.0.0-M4</mavenSurefirePluginVersion>
 
         <!-- maven-source-plugin http://maven.apache.org/plugins/maven-source-plugin/ -->
         <mavenSourcePluginVersion>3.0.1</mavenSourcePluginVersion>
@@ -169,9 +171,6 @@
 
         <!-- maven-remote-resources-plugin http://maven.apache.org/plugins/maven-remote-resources-plugin/ -->
         <mavenRemoteResourcesPluginVersion>1.5</mavenRemoteResourcesPluginVersion>
-
-        <!-- maven-deploy-plugin http://maven.apache.org/plugins/maven-deploy-plugin/ -->
-        <mavenDeployPluginVersion>2.8.2</mavenDeployPluginVersion>
 
         <!-- maven-install-plugin http://maven.apache.org/plugins/maven-install-plugin/ -->
         <mavenInstallPluginVersion>3.0.0-M1</mavenInstallPluginVersion>
@@ -192,12 +191,9 @@
         <!-- this property makes sure NetBeans 6.8+ picks up some formatting rules from checkstyle -->
         <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
 
-        <jackson.version>2.13.3</jackson.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <jackson.version>2.12.6</jackson.version>
+        <slf4j.version>1.7.31</slf4j.version>
         <swagger.version>1.6.2</swagger.version>
-        <apache-httpcore.version>4.4.14</apache-httpcore.version>
-        <apache-httpclient.version>4.5.13</apache-httpclient.version>
-        <apache-httpasyncclient.version>4.1.4</apache-httpasyncclient.version>
     </properties>
 
     <prerequisites>
@@ -205,7 +201,36 @@
     </prerequisites>
 	<dependencyManagement>
 		<dependencies>
-
+			 <dependency>
+		      <groupId>org.apache.httpcomponents</groupId>
+		      <artifactId>httpasyncclient-osgi</artifactId>
+		      <version>4.1.4</version>
+		    </dependency>
+		    <dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpcore-osgi</artifactId>
+			    <version>4.4.14</version>
+			</dependency>
+		    <dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpcore</artifactId>
+			    <version>4.4.14</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpcore-nio</artifactId>
+			    <version>4.4.14</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpclient-osgi</artifactId>
+			    <version>4.5.13</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpclient</artifactId>
+			    <version>4.5.13</version>
+			</dependency>
 			<dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-jdk14</artifactId>
@@ -241,11 +266,11 @@
                 <artifactId>log4j-over-slf4j</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+
 			
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<!-- If you need support for JDK 1.7 or Android, use the Android flavor -->
 				<version>31.1-jre</version>
 			</dependency>
 
@@ -283,7 +308,7 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.version}</version>
+				<version>${jackson.version}.1</version>
 			</dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -597,6 +622,18 @@
                 <artifactId>json-fluent</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+		        <groupId>org.asciidoctor</groupId>
+		        <artifactId>asciidoctorj</artifactId>
+		        <version>2.5.3</version>
+		        <exclusions>
+		          <exclusion>
+		            <groupId>com.beust</groupId>
+		            <artifactId>jcommander</artifactId>
+		          </exclusion>
+		        </exclusions>
+		      </dependency>
+		            
 		    <dependency>
 		      <groupId>org.gluufederation.commons.ui</groupId>
 		      <artifactId>commons</artifactId>
@@ -741,6 +778,11 @@
 			    <artifactId>commons-lang3</artifactId>
 			    <version>3.11</version>
 			</dependency>
+			<dependency>
+			   <groupId>commons-io</groupId>
+			   <artifactId>commons-io</artifactId>
+			   <version>2.7</version>
+			 </dependency>
 		    <dependency>
 			    <groupId>junit</groupId>
 			    <artifactId>junit</artifactId>
@@ -764,8 +806,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
-                    <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.7.10</version>
+                    <artifactId>cargo-maven3-plugin</artifactId>
+                    <version>1.9.8</version>
                 </plugin>
                 <plugin>
                     <groupId>org.gluufederation.commons</groupId>
@@ -852,7 +894,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>${mavenDeployPluginVersion}</version>
+                    <version>3.0.0-M1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -1242,16 +1284,23 @@
 			<plugin>
 		      <groupId>org.sonatype.plugins</groupId>
 		      <artifactId>nexus-staging-maven-plugin</artifactId>
-		      <version>1.6.7</version>
+		      <version>1.6.12</version>
 		      <extensions>true</extensions>
 		      <configuration>
 		        <serverId>ossrh</serverId>
 		        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
 		        <autoReleaseAfterClose>true</autoReleaseAfterClose>
 		        <stagingProgressTimeoutMinutes>15</stagingProgressTimeoutMinutes>
-		        <keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
-		        <keepStagingRepositoryOnCloseRuleFailure>true</keepStagingRepositoryOnCloseRuleFailure>
+		        <keepStagingRepositoryOnFailure>false</keepStagingRepositoryOnFailure>
+		        <keepStagingRepositoryOnCloseRuleFailure>false</keepStagingRepositoryOnCloseRuleFailure>
 		      </configuration>
+		      <dependencies>
+		      	<dependency>
+			        <groupId>com.google.guava</groupId>
+			        <artifactId>guava</artifactId>
+			        <version>15.0</version>
+			     </dependency>
+		      </dependencies>
 		    </plugin>
         </plugins>
     </build>
@@ -1280,11 +1329,26 @@
 				          <goals>
 				            <goal>sign</goal>
 				          </goals>
+				          <configuration>
+				                <gpgArguments>
+				                    <arg>--pinentry-mode</arg>
+				                    <arg>loopback</arg>
+				                </gpgArguments>
+				            </configuration>
 				        </execution>
 				      </executions>
 				    </plugin>
 	            </plugins>
 	        </build>
+	    </profile>
+	    <profile>
+	      <id>jdk16.options</id>
+	      <activation>
+	        <jdk>[16,)</jdk>
+	      </activation>
+	      <properties>
+	        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED  --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.util.regex=ALL-UNNAMED --add-opens java.base/java.security=ALL-UNNAMED --add-opens java.naming/javax.naming.spi=ALL-UNNAMED</argLine>
+	      </properties>
 	    </profile>
     </profiles>
     <reporting>

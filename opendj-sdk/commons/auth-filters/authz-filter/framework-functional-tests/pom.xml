@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.gluufederation.commons.auth-filters</groupId>
         <artifactId>authz-filter</artifactId>
-        <version>2.0.11</version>
+        <version>2.0.15</version>
     </parent>
 	<groupId>org.gluufederation.commons.auth-filters.authz-filter</groupId>
     <artifactId>framework-functional-tests</artifactId>
@@ -91,16 +91,16 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
+                <artifactId>cargo-maven3-plugin</artifactId>
                 <configuration>
                     <!-- Container configuration -->
                     <container>
-                        <containerId>tomcat7x</containerId>
-                        <zipUrlInstaller>
-                            <url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.47/bin/apache-tomcat-7.0.47.zip</url>
-                            <downloadDir>${project.build.directory}/downloads</downloadDir>
-                            <extractDir>${project.build.directory}/extracts</extractDir>
-                        </zipUrlInstaller>
+                        <containerId>tomcat9x</containerId>
+<!--                         <zipUrlInstaller> -->
+<!--                             <url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.47/bin/apache-tomcat-7.0.47.zip</url> -->
+<!--                             <downloadDir>${project.build.directory}/downloads</downloadDir> -->
+<!--                             <extractDir>${project.build.directory}/extracts</extractDir> -->
+<!--                         </zipUrlInstaller> -->
                     </container>
                     <!-- Configuration to use with the container or the deployer -->
                     <configuration>

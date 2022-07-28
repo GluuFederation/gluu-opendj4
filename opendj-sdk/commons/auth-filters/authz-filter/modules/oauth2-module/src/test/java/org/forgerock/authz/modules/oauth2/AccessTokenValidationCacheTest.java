@@ -27,20 +27,13 @@ import static org.testng.Assert.assertNull;
 
 public class AccessTokenValidationCacheTest {
 
-    private AccessTokenValidationCache cache;
-
-    @BeforeMethod
-    public void setUp() {
-        cache = new AccessTokenValidationCache(2);
-    }
-
     @Test
     public void shouldAddEntryToCache() {
-
+    	AccessTokenValidationCache cache = new AccessTokenValidationCache(2);
         //Given
         String accessToken = "ACCESS_TOKEN";
         AccessTokenValidationResponse validationResponse = new AccessTokenValidationResponse(0);
-
+        assertEquals(cache.size(), 0);
         //When
         cache.add(accessToken, validationResponse);
 
@@ -50,7 +43,7 @@ public class AccessTokenValidationCacheTest {
 
     @Test
     public void shouldReplaceCacheEntry() {
-
+    	AccessTokenValidationCache cache = new AccessTokenValidationCache(2);
         //Given
         String accessToken = "ACCESS_TOKEN";
         AccessTokenValidationResponse validationResponse = new AccessTokenValidationResponse(0);
@@ -65,7 +58,7 @@ public class AccessTokenValidationCacheTest {
 
     @Test
     public void shouldRemoveOldestEntryWhenCacheFull() {
-
+    	AccessTokenValidationCache cache = new AccessTokenValidationCache(2);
         //Given
         String accessToken1 = "ACCESS_TOKEN_1";
         String accessToken2 = "ACCESS_TOKEN_2";
@@ -87,7 +80,7 @@ public class AccessTokenValidationCacheTest {
 
     @Test
     public void shouldGetEntryFromCache() {
-
+    	AccessTokenValidationCache cache = new AccessTokenValidationCache(2);
         //Given
         String accessToken = "ACCESS_TOKEN";
         AccessTokenValidationResponse validationResponse = new AccessTokenValidationResponse(0);
@@ -101,7 +94,7 @@ public class AccessTokenValidationCacheTest {
 
     @Test
     public void shouldReturnNullWhenAccessTokenNotInCache() {
-
+    	AccessTokenValidationCache cache = new AccessTokenValidationCache(2);
         //Given
         String accessToken1 = "ACCESS_TOKEN_1";
         String accessToken2 = "ACCESS_TOKEN_2";
@@ -116,7 +109,7 @@ public class AccessTokenValidationCacheTest {
 
     @Test
     public void cacheShouldBeThreadSafe() throws InterruptedException {
-
+    	AccessTokenValidationCache cache = new AccessTokenValidationCache(2);
         //Given
         final int runs = 1_000;
         final CountDownLatch latch = new CountDownLatch(runs * 2);
