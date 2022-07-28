@@ -18,7 +18,7 @@ public class FipsStaticUtils {
 	private static final String BC_FIPS_PROVIDER_CLASS_NAME    = "org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider";
 
     public static void registerBcProvider(){
-    	if (!isFips()) {
+    	if (!StaticUtils.isFips()) {
     		return;
     	}
 
