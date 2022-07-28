@@ -1,11 +1,11 @@
 # <img alt="OpenDJ Logo" src="https://github.com/GluuFederation/OpenDJ/raw/master/logo.png" width="300"/>
 [![Latest release](https://img.shields.io/github/release/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ/releases)
-[![Build Status](https://travis-ci.com/GluuFederation/OpenDJ.svg)](https://travis-ci.com/GluuFederation/OpenDJ)
+[![Build](https://github.com/GluuFederation/OpenDJ/actions/workflows/maven.yml/badge.svg)](https://github.com/GluuFederation/OpenDJ/actions/workflows/maven.yml)
 [![Issues](https://img.shields.io/github/issues/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ/issues)
 [![Last commit](https://img.shields.io/github/last-commit/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ/commits/master)
 [![License](https://img.shields.io/badge/license-CDDL-blue.svg)](https://github.com/GluuFederation/OpenDJ/blob/master/LICENSE.md)
 [![Downloads](https://img.shields.io/github/downloads/GluuFederation/OpenDJ/total.svg)](https://github.com/GluuFederation/OpenDJ/releases)
-[![Docker](https://shields.beevelop.com/docker/pulls/gluufederation/opendj.svg)](https://hub.docker.com/r/gluufederation/opendj)
+[![Docker](https://img.shields.io/docker/pulls/gluufederation/opendj.svg)](https://hub.docker.com/r/gluufederation/opendj)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/GluuFederation/OpenDJ)
 [![Top language](https://img.shields.io/github/languages/top/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ)
 [![Code size in bytes](https://img.shields.io/github/languages/code-size/GluuFederation/OpenDJ.svg)](https://github.com/GluuFederation/OpenDJ)
