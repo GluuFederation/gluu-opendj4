@@ -24,7 +24,7 @@ metadata:
       NOTE: Scaling to more than one replica is not supported. You must have persistent volumes available in your cluster to use this template.
     iconClass: icon-sso
     openshift.io/display-name: OpenDJ
-    openshift.io/documentation-url: https://github.com/GluuFederation/OpenDJ/wiki
+    openshift.io/documentation-url: https://github.com/GluuFederation/gluu-opendj4/wiki
     openshift.io/long-description: This template provides a standalone OpenDJ
       server with a database created.  The database is stored on persistent storage.  The
       root DN, base DN, and password are chosen via parameters when provisioning

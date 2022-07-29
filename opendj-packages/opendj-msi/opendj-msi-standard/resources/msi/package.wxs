@@ -26,7 +26,7 @@
     <Property Id="DiskPrompt" Value="$(var.name) $(var.major).$(var.minor).$(var.point) Installation"/>
 
     <Property Id="ALLUSERS" Value="1"/>
-    <Property Id="ARPHELPLINK" Value="https://github.com/GluuFederation/OpenDJ/wiki"/>
+    <Property Id="ARPHELPLINK" Value="https://github.com/GluuFederation/gluu-opendj4/wiki"/>
 
     <!-- UI customization -->
     <WixVariable Id="WixUIBannerBmp" Value="opendjbanner.bmp" />

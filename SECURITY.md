@@ -10,4 +10,4 @@
 
 ## Reporting a Vulnerability
 
-Please create issue  https://github.com/GluuFederation/OpenDJ/issues/new?template=Bug_report.md
+Please create issue  https://github.com/GluuFederation/gluu-opendj4/issues/new?template=Bug_report.md

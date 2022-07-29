@@ -64,7 +64,7 @@
     </properties>
 
     <inceptionYear>2011</inceptionYear>
-    <url>https://github.com/GluuFederation/OpenDJ</url>
+    <url>https://github.com/GluuFederation/gluu-opendj4</url>
 
     <mailingLists>
          <mailingList>
@@ -86,7 +86,7 @@
     <licenses>
         <license>
             <name>CDDL-1.1</name>
-            <url>https://github.com/GluuFederation/OpenDJ/blob/master/LICENSE.md</url>
+            <url>https://github.com/GluuFederation/gluu-opendj4/blob/master/LICENSE.md</url>
             <comments>Common Development and Distribution License (CDDL) 1.1.
                 This license applies to OpenDJ source code as indicated in the
                 source files.
@@ -106,13 +106,13 @@
     </developers>
      <issueManagement>
         <system>github.com</system>
-        <url>https://github.com/GluuFederation/OpenDJ/issues</url>
+        <url>https://github.com/GluuFederation/gluu-opendj4/issues</url>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:https://github.com/GluuFederation/OpenDJ.git</connection>
-        <developerConnection>scm:git:https://github.com/GluuFederation/OpenDJ.git</developerConnection>
-        <url>https://github.com/GluuFederation/OpenDJ</url>
+        <connection>scm:git:https://github.com/GluuFederation/gluu-opendj4.git</connection>
+        <developerConnection>scm:git:https://github.com/GluuFederation/gluu-opendj4.git</developerConnection>
+        <url>https://github.com/GluuFederation/gluu-opendj4</url>
       	<tag>4.5.0</tag>
   	</scm>
 	<repositories>

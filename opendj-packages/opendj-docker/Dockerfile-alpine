@@ -22,7 +22,7 @@ WORKDIR /opt
 RUN apk add --update --no-cache --virtual builddeps curl unzip \
  && apk upgrade --update --no-cache \
  && apk add bash \
- && curl -L https://github.com/GluuFederation/OpenDJ/releases/download/$VERSION/opendj-$VERSION.zip --output opendj-$VERSION.zip \
+ && curl -L https://github.com/GluuFederation/gluu-opendj4/releases/download/$VERSION/opendj-$VERSION.zip --output opendj-$VERSION.zip \
  && unzip opendj-$VERSION.zip \
  && apk del builddeps \
  && apk del curl \

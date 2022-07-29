@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: opendj
 Upstream-Contact: Gluu Federation <support@gluu.org>
-Source: https://github.com/GluuFederation/OpenDJ
+Source: https://github.com/GluuFederation/gluu-opendj4
 Files: *
 Copyright: 2013-2015 ForgeRock AS. 2018- Gluu Federation
 License: CDDL

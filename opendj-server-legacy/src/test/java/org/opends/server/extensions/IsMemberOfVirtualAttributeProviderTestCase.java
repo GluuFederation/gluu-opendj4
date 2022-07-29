@@ -920,7 +920,7 @@ public class IsMemberOfVirtualAttributeProviderTestCase
   }
   
   /**
-   * https://github.com/GluuFederation/OpenDJ/issues/10
+   * https://github.com/GluuFederation/gluu-opendj4/issues/10
    *
    * @throws  Exception  If an unexpected problem occurs.
    */

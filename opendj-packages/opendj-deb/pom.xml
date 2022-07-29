@@ -48,7 +48,7 @@
         <deb.release>1</deb.release>
         <deb.maintainer>support@gluu.org</deb.maintainer>
         <manpage.dir>${project.build.directory}/dependency/man</manpage.dir>
-        <deb.doc.homepage.url>https://github.com/GluuFederation/OpenDJ</deb.doc.homepage.url>
+        <deb.doc.homepage.url>https://github.com/GluuFederation/gluu-opendj4</deb.doc.homepage.url>
         <deb.product.name />
         <deb.product.name.lowercase />
         <deb.resources.path />
