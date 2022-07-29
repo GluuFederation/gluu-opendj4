@@ -1,6 +1,6 @@
 FROM openjdk:17
 
-MAINTAINER Open Identity Platform Community <open-identity-platform-opendj@googlegroups.com>
+MAINTAINER Gluu Federation <open-identity-platform-opendj@googlegroups.com>
 
 ENV ADD_BASE_ENTRY="--addBaseEntry" \
     PORT=1389 \
@@ -22,7 +22,7 @@ WORKDIR /opt
 
 RUN  microdnf upgrade --nodocs \
  && microdnf install  --nodocs curl unzip findutils \
- && curl -L https://github.com/OpenIdentityPlatform/OpenDJ/releases/download/$VERSION/opendj-$VERSION.zip --output opendj-$VERSION.zip \
+ && curl -L https://github.com/GluuFederation/OpenDJ/releases/download/$VERSION/opendj-$VERSION.zip --output opendj-$VERSION.zip \
  && unzip opendj-$VERSION.zip \
  && microdnf remove unzip \
  && microdnf clean all\

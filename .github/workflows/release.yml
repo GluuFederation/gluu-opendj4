@@ -70,7 +70,7 @@ jobs:
            gpg --list-secret-keys --keyid-format LONG
       - name: Configure Git User
         run: |
-          git config --global user.name "Open Identity Platform Community"
+          git config --global user.name "Gluu Federation"
           git config --global user.email "open-identity-platform-opendj@googlegroups.com"
       - name: Release and publish to the Maven Central Repository
         env:
