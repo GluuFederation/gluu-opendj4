@@ -54,6 +54,12 @@
             </exclusions>
         </dependency>
 
+	<dependency>
+		<groupId>org.bouncycastle</groupId>
+		<artifactId>bcpkix-fips</artifactId>
+		<scope>test</scope>
+	</dependency>
+
         <dependency>
             <groupId>org.gluufederation.commons.i18n-framework</groupId>
             <artifactId>core</artifactId>

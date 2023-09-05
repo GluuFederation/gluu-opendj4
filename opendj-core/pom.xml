@@ -95,19 +95,16 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bc-fips</artifactId>
-			<version>${bc.fips.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bctls-fips</artifactId>
-			<version>${bctls.fips.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-fips</artifactId>
-			<version>${bcpkix.fips.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -119,10 +116,6 @@
 
 
     <properties>
-        <bc.fips.version>1.0.2.3</bc.fips.version>
-        <bcpkix.fips.version>1.0.7</bcpkix.fips.version>
-        <bctls.fips.version>1.0.14</bctls.fips.version>
-
         <opendj.osgi.import.additional>
             com.sun.security.auth*;resolution:=optional
         </opendj.osgi.import.additional>
