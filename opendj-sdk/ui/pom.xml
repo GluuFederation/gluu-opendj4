@@ -676,7 +676,7 @@
       <dependency>
         <groupId>org.gluufederation.commons.ui.libs</groupId>
         <artifactId>font-awesome</artifactId>
-        <version>4.5.1</version>
+        <version>4.5.0</version>
         <type>zip</type>
       </dependency>
       <dependency>
