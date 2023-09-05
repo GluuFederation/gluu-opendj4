@@ -59,11 +59,14 @@ import org.opends.server.protocols.jmx.Credential;
 import org.opends.server.protocols.jmx.JmxClientConnection;
 import org.opends.server.types.DirectoryException;
 
+import org.forgerock.opendj.ldap.schema.Schema;
+
 import static org.opends.messages.ConfigMessages.*;
 import static org.opends.server.protocols.internal.Requests.*;
 import static org.opends.server.util.CollectionUtils.*;
 import static org.opends.server.util.ServerConstants.*;
 import static org.opends.server.util.StaticUtils.*;
+import static org.opends.server.schema.SchemaConstants.SYNTAX_INTEGER_OID;
 
 /**
  * This class defines a JMX MBean that can be registered with the Directory
@@ -323,7 +326,18 @@ public final class JMXMBean
   {
     // It's possible that this is a monitor attribute rather than a configurable
     // one. Check all of those.
-    AttributeType attrType = DirectoryServer.getInstance().getServerContext().getSchema().getAttributeType(name);
+	Schema schema = DirectoryServer.getInstance().getServerContext().getSchema();
+	Schema strictSchema = schema.asStrictSchema();
+	
+	AttributeType attrType = null;
+	if (strictSchema.hasAttributeType(name)) {
+		attrType = strictSchema.getAttributeType(name);
+	}
+	
+	if (attrType == null) {
+	    attrType = schema.getAttributeType(name);
+	}
+	
     for (MonitorProvider<? extends MonitorProviderCfg> monitor : monitorProviders)
     {
       for (org.opends.server.types.Attribute a : monitor.getMonitorData())
@@ -337,7 +351,27 @@ public final class JMXMBean
 
           Iterator<ByteString> iterator = a.iterator();
           ByteString firstValue = iterator.next();
+          
+          if (SYNTAX_INTEGER_OID.equals(attrType.getSyntax().getOID())) {
+              if (iterator.hasNext())
+              {
+                List<Integer> intValues = newArrayList(firstValue.toInt());
+                while (iterator.hasNext())
+                {
+                  ByteString value = iterator.next();
+                  intValues.add(value.toInt());
+                }
 
+                Integer[] valueArray = intValues.toArray(new Integer[intValues.size()]);
+                return new Attribute(name, valueArray);
+              }
+              else
+              {
+                return new Attribute(name, firstValue.toInt());
+              }
+          }
+
+          // Default String type
           if (iterator.hasNext())
           {
             List<String> stringValues = newArrayList(firstValue.toString());
@@ -582,7 +616,11 @@ public final class JMXMBean
     {
       for (org.opends.server.types.Attribute a : monitor.getMonitorData())
       {
-        attrs.add(new MBeanAttributeInfo(a.getAttributeDescription().getNameOrOID(), String.class.getName(),
+    	Class typeClazz = String.class;
+    	if (SYNTAX_INTEGER_OID.equals(a.getAttributeDescription().getAttributeType().getSyntax().getOID())) {
+        	typeClazz = Integer.class;
+    	}
+        attrs.add(new MBeanAttributeInfo(a.getAttributeDescription().getNameOrOID(), typeClazz.getName(),
                                          null, true, false, false));
       }
     }
