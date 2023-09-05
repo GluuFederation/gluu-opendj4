@@ -127,7 +127,7 @@
             <artifactItem>
               <groupId>org.gluufederation.commons.ui.libs</groupId>
               <artifactId>font-awesome</artifactId>
-              <version>4.5.0</version>
+              <version>4.5.1</version>
               <packaging>zip</packaging>
               <downloadUrl>https://github.com/FortAwesome/Font-Awesome/archive/v{version}.{packaging}</downloadUrl>
             </artifactItem>
@@ -676,7 +676,7 @@
       <dependency>
         <groupId>org.gluufederation.commons.ui.libs</groupId>
         <artifactId>font-awesome</artifactId>
-        <version>4.5.0</version>
+        <version>4.5.1</version>
         <type>zip</type>
       </dependency>
       <dependency>
