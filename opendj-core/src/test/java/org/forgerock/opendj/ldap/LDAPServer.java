@@ -24,6 +24,7 @@ import static org.forgerock.opendj.ldap.TestCaseUtils.loopbackWithDynamicPort;
 import java.math.BigInteger;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.SecureRandom;
@@ -552,7 +553,7 @@ public class LDAPServer implements ServerConnectionFactory<LDAPClientContext, In
 	        
 	        KeyStore ks = KeyStore.getInstance("JKS");
 	        ks.load(null, null);
-	        ks.setKeyEntry("localhost", keyGen.getPrivateKey(),password.toCharArray(), chain);
+	        ks.setKeyEntry("localhost", keyPair.getPrivate(), password.toCharArray(), chain);
 	        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 	        kmf.init(ks, password.toCharArray());
 	        sslContext = new SSLContextBuilder().setKeyManager(kmf.getKeyManagers()[0]).getSSLContext();
