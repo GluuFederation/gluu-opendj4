@@ -326,18 +326,7 @@ public final class JMXMBean
   {
     // It's possible that this is a monitor attribute rather than a configurable
     // one. Check all of those.
-	Schema schema = DirectoryServer.getInstance().getServerContext().getSchema();
-	Schema strictSchema = schema.asStrictSchema();
-	
-	AttributeType attrType = null;
-	if (strictSchema.hasAttributeType(name)) {
-		attrType = strictSchema.getAttributeType(name);
-	}
-	
-	if (attrType == null) {
-	    attrType = schema.getAttributeType(name);
-	}
-	
+    AttributeType attrType = DirectoryServer.getInstance().getServerContext().getSchema().getAttributeType(name);
     for (MonitorProvider<? extends MonitorProviderCfg> monitor : monitorProviders)
     {
       for (org.opends.server.types.Attribute a : monitor.getMonitorData())
@@ -351,27 +340,7 @@ public final class JMXMBean
 
           Iterator<ByteString> iterator = a.iterator();
           ByteString firstValue = iterator.next();
-          
-          if (SYNTAX_INTEGER_OID.equals(attrType.getSyntax().getOID())) {
-              if (iterator.hasNext())
-              {
-                List<Integer> intValues = newArrayList(firstValue.toInt());
-                while (iterator.hasNext())
-                {
-                  ByteString value = iterator.next();
-                  intValues.add(value.toInt());
-                }
 
-                Integer[] valueArray = intValues.toArray(new Integer[intValues.size()]);
-                return new Attribute(name, valueArray);
-              }
-              else
-              {
-                return new Attribute(name, firstValue.toInt());
-              }
-          }
-
-          // Default String type
           if (iterator.hasNext())
           {
             List<String> stringValues = newArrayList(firstValue.toString());
@@ -408,7 +377,7 @@ public final class JMXMBean
    *                                      associated with this MBean.
    */
   @Override
-  public Attribute getAttribute(String attributeName)
+  public Object getAttribute(String attributeName)
          throws AttributeNotFoundException
   {
     // Get the jmx Client connection
@@ -433,7 +402,7 @@ public final class JMXMBean
         throw new AttributeNotFoundException(message.toString());
       }
 
-      return getJmxAttribute(attributeName);
+      return getJmxAttribute(attributeName).getValue();
     }
     catch (AttributeNotFoundException e)
     {
