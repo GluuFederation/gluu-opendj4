@@ -20,7 +20,7 @@
     <parent>
         <artifactId>opendj-parent</artifactId>
         <groupId>org.gluufederation.opendj</groupId>
-        <version>4.5.0</version>
+        <version>4.5.1</version>
     </parent>
 
     <artifactId>opendj-core</artifactId>
@@ -92,29 +92,30 @@
 		</dependency>
 
 	    <!-- BC FIPS Provider libs -->
-	    <dependency>
-	      <groupId>org.bouncycastle</groupId>
-	      <artifactId>bc-fips</artifactId>
-	      <version>${bc.fips.version}</version>
-	    </dependency>
-	
-	    <dependency>
-	      <groupId>org.bouncycastle</groupId>
-	      <artifactId>bctls-fips</artifactId>
-	      <version>${bctls.fips.version}</version>
-	    </dependency>
-	    
-	     <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bc-fips</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bctls-fips</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-fips</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
     </dependencies>
 
 
     <properties>
-        <bc.fips.version>1.0.2.3</bc.fips.version>
-        <bctls.fips.version>1.0.14</bctls.fips.version>
-
         <opendj.osgi.import.additional>
             com.sun.security.auth*;resolution:=optional
         </opendj.osgi.import.additional>
@@ -144,13 +145,13 @@
                 </executions>
             </plugin>
 
-            <!-- Retrieve the SCM revision number and store it into the ${buildRevision} property -->
+			<!-- Retrieve the SCM revision number and store it into the ${buildRevision} property -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Creates opendj-core bundle -->
+			<!-- Creates opendj-core bundle -->
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -200,12 +201,12 @@
 
     <profiles>
         <profile>
-            <!-- This profile provides API/ABI compatiblity checks and reports via Clirr -->
+			<!-- This profile provides API/ABI compatiblity checks and reports via Clirr -->
             <id>clirr</id>
             <activation>
                 <file>
                     <exists>clirr-ignored-api-changes.xml</exists>
-                    <!-- this file name is duplicated due to MNG-4471 -->
+					<!-- this file name is duplicated due to MNG-4471 -->
                 </file>
             </activation>
 
@@ -256,7 +257,7 @@
                                 <comparisonArtifact>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>opendj-ldap-sdk</artifactId>
-                                    <!-- former name of this jar -->
+									<!-- former name of this jar -->
                                     <version>2.6.0</version>
                                 </comparisonArtifact>
                             </comparisonArtifacts>
@@ -270,7 +271,7 @@
             </reporting>
         </profile>
 
-        <!--
+		<!--
           Generates consolidated Javadoc covering both LDAP SDK packages
           and also dependency (and transitive dependency) ForgeRock packages.
         -->

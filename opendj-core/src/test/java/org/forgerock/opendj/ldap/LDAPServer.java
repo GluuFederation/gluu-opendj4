@@ -21,22 +21,15 @@ import static org.forgerock.opendj.ldap.LDAPListener.*;
 import static org.forgerock.opendj.ldap.LdapException.newLdapException;
 import static org.forgerock.opendj.ldap.TestCaseUtils.loopbackWithDynamicPort;
 
-import java.math.BigInteger;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.security.KeyPairGenerator;
 import java.security.KeyStore;
-import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -84,13 +77,9 @@ import com.forgerock.opendj.ldap.controls.AccountUsabilityRequestControl;
 import com.forgerock.opendj.ldap.controls.AccountUsabilityResponseControl;
 import com.forgerock.reactive.ServerConnectionFactoryAdapter;
 
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.X509v3CertificateBuilder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.operator.OperatorCreationException;
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import sun.security.tools.keytool.CertAndKeyGen;
+import sun.security.x509.X500Name;
+
 /**
  * A simple ldap server that manages 1000 entries and used for running
  * testcases.
@@ -531,24 +520,10 @@ public class LDAPServer implements ServerConnectionFactory<LDAPClientContext, In
     static {
         final String password="keypassword";
         try {
-        	SecureRandom sr = new SecureRandom();
-        	KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-        	keyGen.initialize(2048, sr);
-            KeyPair keyPair = keyGen.generateKeyPair();
-            
-            X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(
-                    new X500Name("CN=localhost"),
-                    BigInteger.valueOf(sr.nextInt()),
-                    new Date(System.currentTimeMillis() - 1000L * 60 * 60 * 24 * 1),
-                    new Date(System.currentTimeMillis() + (1000L * 60 * 60 * 24 * 365 * 10)),
-                    new X500Name("CN=localhost"), keyPair.getPublic());
-
-            X509CertificateHolder certHolder = certGen.build(new JcaContentSignerBuilder("SHA256withRSA").build(keyPair.getPrivate()));
-            X509Certificate cert = new JcaX509CertificateConverter().getCertificate(certHolder);
-	        
+	        CertAndKeyGen keyGen=new CertAndKeyGen("RSA","SHA256WithRSA",null);
+	        keyGen.generate(2048);
 	        X509Certificate[] chain=new X509Certificate[1];
-
-	        chain[0] = cert;
+	        chain[0]=keyGen.getSelfCertificate(new X500Name("CN=localhost"), (long)1*3600);
 	        
 	        KeyStore ks = KeyStore.getInstance("JKS");
 	        ks.load(null, null);
@@ -556,7 +531,7 @@ public class LDAPServer implements ServerConnectionFactory<LDAPClientContext, In
 	        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 	        kmf.init(ks, password.toCharArray());
 	        sslContext = new SSLContextBuilder().setKeyManager(kmf.getKeyManagers()[0]).getSSLContext();
-        } catch (Exception e) {
+        }catch (Exception e) {
 			new RuntimeException("generate self-signed certificate",e);
 		}
     }
