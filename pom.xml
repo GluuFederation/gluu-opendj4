@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>org.gluufederation.opendj</groupId>
     <artifactId>opendj-parent</artifactId>
-	<version>4.5.1</version>
+	<version>4.5.2</version>
     <packaging>pom</packaging>
 
     <name>OpenDJ Directory Services Project</name>
@@ -117,7 +117,7 @@
         <connection>scm:git:https://github.com/GluuFederation/gluu-opendj4.git</connection>
         <developerConnection>scm:git:https://github.com/GluuFederation/gluu-opendj4.git</developerConnection>
         <url>https://github.com/GluuFederation/gluu-opendj4</url>
-      	<tag>4.5.1</tag>
+      	<tag>4.5.2</tag>
   	</scm>
 	<repositories>
 		<repository>
