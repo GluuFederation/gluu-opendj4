@@ -62,9 +62,9 @@
 	<sonar.cpp.file.suffixes>-</sonar.cpp.file.suffixes>
 	<sonar.objc.file.suffixes>-</sonar.objc.file.suffixes>
 
-        <bc.fips.version>(,1.0.2.4]</bc.fips.version>
+        <bc.fips.version>(,1.0.2.5]</bc.fips.version>
         <bcpkix.fips.version>1.0.7</bcpkix.fips.version>
-        <bctls.fips.version>1.0.14</bctls.fips.version>
+        <bctls.fips.version>1.0.19</bctls.fips.version>
     </properties>
 
     <inceptionYear>2011</inceptionYear>
