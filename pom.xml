@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>org.gluufederation.opendj</groupId>
     <artifactId>opendj-parent</artifactId>
-	<version>4.5.3</version>
+	<version>4.5.4</version>
     <packaging>pom</packaging>
 
     <name>OpenDJ Directory Services Project</name>
