@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>org.gluufederation.opendj</groupId>
     <artifactId>opendj-parent</artifactId>
-	<version>4.5.4</version>
+	<version>4.5.5</version>
     <packaging>pom</packaging>
 
     <name>OpenDJ Directory Services Project</name>
@@ -62,8 +62,8 @@
 	<sonar.cpp.file.suffixes>-</sonar.cpp.file.suffixes>
 	<sonar.objc.file.suffixes>-</sonar.objc.file.suffixes>
 
-        <bc.fips.version>(,1.0.2.5]</bc.fips.version>
-        <bcpkix.fips.version>1.0.7</bcpkix.fips.version>
+        <bc.fips.version>(,1.0.2.7]</bc.fips.version>
+        <bcpkix.fips.version>1.0.12</bcpkix.fips.version>
         <bctls.fips.version>1.0.19</bctls.fips.version>
     </properties>
 
@@ -117,7 +117,7 @@
         <connection>scm:git:https://github.com/GluuFederation/gluu-opendj4.git</connection>
         <developerConnection>scm:git:https://github.com/GluuFederation/gluu-opendj4.git</developerConnection>
         <url>https://github.com/GluuFederation/gluu-opendj4</url>
-      	<tag>4.5.4</tag>
+      	<tag>4.5.5</tag>
   	</scm>
 	<repositories>
 		<repository>
