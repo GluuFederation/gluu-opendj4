@@ -76,17 +76,17 @@ public final class JsonConfigTest {
     public void testCustomStageConfigFromJsonRequiresCustomClassLoader() throws Exception {
         JsonValue json = readConfig("/custom.json");
 
-        // cheezy way to navigate to classpath where custom stage is defined
-        final URL customStageBundle = Paths.get(getClass().getResource("").toURI())
-                .getParent()
-                .getParent()
-                .getParent()
-                .getParent()
-                .getParent()
-                .getParent()
-                .resolveSibling("custom-stage/target/classes").toUri().toURL();
+        java.nio.file.Path currentDir = Paths.get("").toAbsolutePath();
+        java.nio.file.Path customStagePath = currentDir.resolve("target/classes");
+    
+        if (!customStagePath.toString().contains("custom-stage")) {
+            customStagePath = currentDir.resolve("custom-stage/target/classes");
+        }
+
+        final URL customStageBundle = customStagePath.toUri().toURL();
+
         try (final URLClassLoader classLoader = new URLClassLoader(
-                new URL[] { customStageBundle }, this.getClass().getClassLoader())) {
+            new URL[] { customStageBundle }, this.getClass().getClassLoader())) {
             ProcessInstanceConfig config = new JsonConfig(classLoader).buildProcessInstanceConfig(json);
             assertThat(config.getStorageType()).isEqualTo(StorageType.STATELESS);
             assertThat(config.getSnapshotTokenConfig().getType()).isEqualTo("jwt");
