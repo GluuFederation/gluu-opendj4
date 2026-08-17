@@ -191,7 +191,7 @@
         <!-- this property makes sure NetBeans 6.8+ picks up some formatting rules from checkstyle -->
         <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
 
-        <jackson-bom.version>2.17.3</jackson-bom.version>
+        <jackson-bom.version>2.22.1</jackson-bom.version>
         <slf4j.version>1.7.36</slf4j.version>
         <swagger.version>1.6.2</swagger.version>
     </properties>
