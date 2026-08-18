@@ -72,7 +72,7 @@ public final class JsonConfigTest {
         assertThat(config.getSnapshotTokenConfig().getType()).isEqualTo("jwt");
     }
 
-    //@Test
+    @Test
     public void testCustomStageConfigFromJsonRequiresCustomClassLoader() throws Exception {
         JsonValue json = readConfig("/custom.json");
 
@@ -96,7 +96,7 @@ public final class JsonConfigTest {
         }
     }
 
-    //@Test
+    @Test
     public void testRegistrationOfCustomStageName() throws Exception {
         JsonValue json = readConfig("/custom-with-name.json");
         Map<String, Class<? extends StageConfig>> namedTypes = new HashMap<>();
@@ -112,7 +112,7 @@ public final class JsonConfigTest {
         assertThat(stageConfigs.get(0).getClass()).isEqualTo(CustomStageConfig.class);
     }
 
-    //@Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testCustomStageConfigFromJsonFailsWithDefaultClassLoader() throws Exception {
         JsonValue json = readConfig("/custom.json");
         new JsonConfig(getClass().getClassLoader()).buildProcessInstanceConfig(json);
